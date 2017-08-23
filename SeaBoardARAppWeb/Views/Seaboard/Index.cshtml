@@ -1,0 +1,316 @@
+﻿@model SB.AR.AppWeb.ViewModels.DashboardViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var pathAndQuery = HttpContext.Current.Request.Url.Query;
+    var link = string.Empty;
+}
+
+<style type="text/css">
+   
+
+    
+  table.dataTable thead th, table.dataTable thead td, table.dataTable.no-footer {
+        border-bottom: none !important;
+    }
+    .dtable tr.even:hover {
+        background-color: #eee;
+        cursor: pointer;
+    }
+    .dtable tr.odd:hover {
+        background-color: #eee;
+        cursor: pointer;
+    }
+    .container {
+        width: 970px !important;
+    }
+
+    chromeControl_bottomheader {
+        padding-left: 10px !important;
+    }
+
+    .ms-core-listMenu-verticalBox > .ms-core-listMenu-item, .ms-core-listMenu-verticalBox li.static > .ms-core-listMenu-item {
+        padding: 5px 0px !important;
+    }
+
+    #sideNavBox {
+        padding-left: 5px !important;
+    }
+
+    .dtable{
+        width:95% !important;
+    }
+    .dataTables_wrapper .dataTables_paginate {
+        padding-right: 40px !important;
+    }
+</style>
+<div class="main-heading-wrapper">
+    <h2>Dashboard</h2>
+</div>
+<div class="main-box-wrapper">
+    <div class="right-panel" id="rightPanelContainer">
+        <div class="three-block-table">
+            <h3>My Approvals</h3>
+            <div class="dashboard-table owl-carousel owl-theme">
+                <div class="item">
+                    <div class="">
+                        <table class="table table-bordered dtable">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Assigned To</th>
+                                    <th>Status</th>
+                                    @*<th>Priority</th>*@
+                                    <th>Due Date</th>
+                                    @*<th>% Complete</th>*@
+                                    @*<th>Predecessors</th>
+                                    <th>Related Content</th>
+                                    <th>Outcome</th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{if (Model.MyApprovals != null)
+                                  { 
+                                      foreach (var workFlow in Model.MyApprovals)
+                                      {
+                                          if (workFlow.AR_ID == null || workFlow.AR_ID ==0)
+                                          {
+                                              workFlow.AR_ID = -1;
+                                          }
+                                         
+                                            link = "/Seaboard/MainView" + pathAndQuery + "&id=" + workFlow.AR_ID + "&tab=approvals";
+                                             var complete = (workFlow.PercentComplete * 100).ToString() + "%";
+                                             var dueDate = string.Format("{0:MM/dd/yyyy}", workFlow.DueDate);
+                                            <tr onclick="window.location = '@link'">
+                                                <td>@workFlow.Title</td>
+                                                <td>@workFlow.AssignedTo</td>
+                                                <td>@workFlow.Status</td>
+                                                @*<td>@workFlow.Priority</td>*@
+                                                <td>@dueDate</td>
+                                                @*<td>@complete</td>*@
+                                                @*<td>@work</td>
+                                                <td>@workFlow.WorkflowLink</td>
+                                                <td>@workFlow.WorkflowOutcome</td>*@
+                                            </tr>
+                                        }
+                                    }
+                                 }
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>          
+            </div>
+        </div>
+        <div class="three-block-table">
+            <h3>Pending Reviews</h3>
+            <div class="dashboard-table owl-carousel owl-theme">
+                <div class="item">
+                    <div class="">
+                        <table class="table table-bordered dtable" >
+                            <thead>
+                                <tr>
+                                    <th>AR ID</th>
+                                    <th>AR Title</th>
+                                    <th>AR Type</th>
+                                    <th>Division</th>
+                                    <th>Company</th>
+                                    <th>Total Cost</th>
+                                    <th>Current Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @{if (Model.PendingReviews != null)
+                                  {
+                                foreach (var ar in Model.PendingReviews)
+                                {
+                                    var division = ar.Division == null ? string.Empty : ar.Division.Value;
+                                    var cmp = ar.Company_Name == null ? string.Empty : ar.Company_Name.Value;
+                                    
+                                    link = "/Seaboard/MainView" + pathAndQuery + "&id=" + ar.AR_ID + "&tab=maintab";
+                                    var totalCost =String.Format("{0:C}", ar.Total_Cost);
+                                    
+                                <tr onclick="window.location = '@link'">
+
+                                    <td> @ar.AR_ID </td>
+                                    <td>@ar.Title</td>
+                                    <td>@ar.AR_Type</td>
+                                    <td>@division</td>
+                                    <td>@cmp</td>
+                                    <td>@totalCost</td>
+                                    <td>@ar.Current_Status</td>
+
+                                </tr>
+                                }
+                                }
+                               }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>               
+            </div>
+        </div>
+        <div class="three-block-table">
+            <h3>My ARs (In Process)</h3>
+            <div class="dashboard-table owl-carousel owl-theme">
+                <div class="item">
+                    <div class="">
+                        <table class="table table-bordered dtable" >
+                            <thead>
+                                <tr>
+                                    <th>AR ID</th>
+                                    <th>AR Title</th>
+                                    <th>AR Type</th>
+                                    <th>Division</th>
+                                    <th>Company</th>
+                                    <th>Total Cost</th>
+                                    <th>Current Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @{if (Model.MyARs != null)
+                                  {
+                                foreach (var ar in Model.MyARs)
+                                {
+                                    var division = ar.Division == null ? string.Empty : ar.Division.Value;
+                                    var cmp = ar.Company_Name == null ? string.Empty : ar.Company_Name.Value;
+
+
+                                    link = "/Seaboard/MainView" + pathAndQuery + "&id=" + ar.AR_ID + "&tab=maintab";
+                                    var totalCost = String.Format("{0:C}", ar.Total_Cost);
+                                    <tr onclick="window.location = '@link'">
+                                            <td>@ar.AR_ID</td>
+                                            <td>@ar.Title</td>
+                                            <td>@ar.AR_Type</td>
+                                            <td>@division</td>
+                                            <td>@cmp</td>
+                                            <td>@totalCost</td>
+                                            <td>@ar.Current_Status</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+             
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/Seaboard/bootstrap.js"></script>
+<script type="text/javascript">    
+    equalheight = function (container) {
+        var currentTallest = 0,
+             currentRowStart = 0,
+             rowDivs = new Array(),
+             $el,
+             topPosition = 0;
+        $(container).each(function () {
+            $el = $(this);
+            $($el).height('auto')
+            topPostion = $el.position().top;
+            if (currentRowStart != topPostion) {
+                for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+                    rowDivs[currentDiv].height(currentTallest);
+                }
+                rowDivs.length = 0; // empty the array
+                currentRowStart = topPostion;
+                currentTallest = $el.height();
+                rowDivs.push($el);
+            } else {
+                rowDivs.push($el);
+                currentTallest = (currentTallest < $el.height()) ? ($el.height()) : (currentTallest);
+            }
+            for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+                rowDivs[currentDiv].height(currentTallest);
+            }
+        });
+    }
+    $(window).load(function () {
+        equalheight('.main-box-wrapper > div');
+        equalheight('.three-block > li');
+    });
+    $(window).resize(function () {
+        equalheight('.main-box-wrapper > div');
+        equalheight('.three-block > li');
+    });
+</script>
+<!-- Slider -->
+<script src="~/Scripts/Seaboard/owl.carousel.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var owl = $(".dashboard-table");
+        owl.owlCarousel({
+            navigation: true,
+            singleItem: true,
+            transitionStyle: "fadeUp"
+        });
+        //Select Transtion Type
+        $("#transitionType").change(function () {
+            var newValue = $(this).val();
+            owl.data("owlCarousel").transitionTypes(newValue);
+            owl.trigger("owl.next");
+        });
+    });
+</script>
+<!-- Select-DatePikcer etc... -->
+<script type="text/javascript" src="~/Scripts/Seaboard/html5shiv.js"></script>
+<script type="text/javascript" src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Seaboard/moment-with-locales.js"></script>
+<script type="text/javascript" src="~/Scripts/Seaboard/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Seaboard/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript">   
+    function LoadPartialView(path, activeId, tabHeadingText) {
+        $("#rightPanelContainer").load(path, function (responseTxt, statusTxt, xhr) {
+            if (statusTxt == "success") {
+
+            }
+            else if (statusTxt == "error")
+                alert("Error: " + xhr.status + ": " + xhr.statusText);
+        });
+    }
+    $(document).ready(function () {
+        $('.datetimepicker').datetimepicker({ format: 'MM-DD-YYYY' });
+        $('.dtable').DataTable({
+                "pageLength": 5,
+                "processing": true,              
+                 bFilter: false, bInfo: false,
+                 "bLengthChange": false,
+                 "order": [[0, "desc"]],
+                 responsive: true                 
+            });
+    });
+</script>
+<script type="text/javascript">
+    // Listener script to redirect to AR edit mode if SharePoint host page gets data in query string
+    function listener(event) {
+        var arrData = event.data.split('|');
+        
+        @{
+        <text>
+            var linkRedirectFromViewARPage = "/Seaboard/MainView" +  "@pathAndQuery" + "&id=" + arrData[0] + "&tab=" + arrData[1]; 
+        </text>
+        }
+        
+        window.location = linkRedirectFromViewARPage;        
+    }
+
+    if (window.addEventListener) {
+        try {
+            addEventListener("message", listener, false);
+        }
+        catch (rr)
+        { }
+
+    }
+    else {
+        try {
+            attachEvent("onmessage", listener);
+        }
+        catch (rr)
+        { }
+
+    }
+</script>

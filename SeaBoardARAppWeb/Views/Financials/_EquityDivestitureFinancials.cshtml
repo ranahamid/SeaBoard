@@ -1,0 +1,132 @@
+﻿@model SB.AR.AppWeb.ViewModels.EquityDivestitureFinancialsViewModel
+<form id="arfrm" method="post" action="/financials/savear" enctype="application/x-www-form-urlencoded">
+    <input type="hidden" name="IsFinanceTab" value="true">
+    <input type="hidden" name="id" value="@Model.AR.ID">
+    <ul class="row narrative-bottom-area">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <li class="col-sm-12 condition-of-assets">
+            <label style="width:100%">Equity Description<span class="mandatory">*</span></label>
+            @Html.TextAreaFor(m => m.Equity_Description, new { @required = "required", placeholder = "" })
+        </li>
+        <li class="col-sm-6 financial-top-area">
+            <div class="vertical-middle">
+                <label>Original Purchase Price</label>
+                @Html.EditorFor(m => m.Original_Purchase_Price, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Number of Shares to Sell<span class="mandatory">*</span></label>
+                @Html.EditorFor(model => model.Number_of_Shares_to_Sell, new { htmlAttributes = new { @class = "rightAlign", @required = "required", @type = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Price Per Share Being Sold<span class="mandatory">*</span></label>
+                @Html.EditorFor(model => model.Price_Per_Share_Being_Sold, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Total of Other Costs/Income Considerations</label>
+                @Html.EditorFor(m => m.Total_Other_Costs, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "0" } })
+            </div>
+        </li>
+        <li class="col-sm-6 financial-top-area">
+           
+            
+
+
+            <div class="vertical-middle dcc-list">
+                <div class="width">
+                    <label class="">Transaction Close Date</label>
+                </div>
+                <div class='IE input-group date datetimepicker width ' style="width: 54%;">
+                    @Html.TextBoxFor(m => m.Transaction_Close_Date, new { @class = "left5 LabelFulll form-control forms br-none", @placeholder = "MM-DD-YYYY" })
+                    <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+                <div class='nonIE input-group date datetimepicker width ' id='' style=" width: 53%; margin-left: -15px;">
+                    @Html.TextBoxFor(m => m.Transaction_Close_Date, new { @class = "left5 LabelFulll form-control forms br-none", @placeholder = "MM-DD-YYYY" })
+                    <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+
+
+
+            <div class="vertical-middle">
+                <label>Percentage Shares Or Ownership Being Sold</label>
+                @Html.EditorFor(m => m.PercentageOfOwnership, new { htmlAttributes = new { @class = "rightAlign", @type = "number", @min = "0" } })
+            </div>
+        </li>
+        <li class="col-sm-12 total-cost-highlight">
+            <ul class="row">
+                <li class="col-sm-6 financial-top-area">
+                    <div class="vertical-middle total-cost-wrapper">
+                        <label><b>Total Cost</b></label>
+                        @Html.EditorFor(m => m.Total_Cost, new { htmlAttributes = new { @class = "greyBold number", @required = "required", @type = "text", @min = "0" } })
+                    </div>
+                    <div class="vertical-middle">
+                        <label>Budget Amount</label>
+                        @Html.EditorFor(m => m.Budget_Amount, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "0" } })
+                    </div>
+                </li>
+                <li class="col-sm-6 financial-top-area">
+                    <div class="budget-line-item">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div>
+                                    <label class="LabelFulll">Budget Line Item #</label>
+                                    @Html.EditorFor(m => m.BudgetLineItem, new { htmlAttributes = new { @type = "text", @class = "LabelFulll" } })
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6 budget-checkbox">
+                                <div class="checkbox">
+                                    <label for="In_Budget" class="CheckBoxLable css-label">In Budget</label>
+                                    @Html.CheckBoxFor(m => m.In_Budget, new { })
+
+                                </div>
+                                <div class="checkbox">
+                                    <label for="Funds_Committed" class="CheckBoxLable css-label">Funds Commited</label>
+                                    @Html.CheckBoxFor(m => m.Funds_Committed, new { })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <script src="~/Scripts/Seaboard/CurrencyFormatter.js"></script>
+    <script type="text/javascript">
+       
+
+        $(document).ready(function () {
+            var height = $(window).height();
+            $(".inner-container").css("height", height + 530 + "px");
+            $('.datetimepicker').datetimepicker({ format: 'MM-DD-YYYY' });
+            $('.selectpicker').selectpicker();
+            totalCostCalculate();
+            function totalCostCalculate() {
+                var pricePerShare = $("#Price_Per_Share_Being_Sold").val();
+                pricePerShare = pricePerShare.replace("$", "");
+                if (pricePerShare == "")
+                    pricePerShare = "1";
+
+                var shares = $("#Number_of_Shares_to_Sell").val();
+                shares = shares.replace("$", "");
+                if (shares == "")
+                    shares = "1";
+
+                var otherCosts = $("#Total_Other_Costs").val();
+                otherCosts = otherCosts.replace("$", "");
+                if (otherCosts == "")
+                    otherCosts = "0";
+
+                var total = (parseFloat(pricePerShare.replace(/[\,]/g, '')) * parseFloat(shares.replace(/[\,]/g, ''))) + parseFloat(otherCosts.replace(/[\,]/g, ''));
+                SetTotalCost(total);
+            }
+
+
+            $("#Price_Per_Share_Being_Sold, #Total_Other_Costs,#ConsolidatedNonCon,#Number_of_Shares_to_Sell").blur(function () {
+                totalCostCalculate();
+            });
+
+        });
+    </script>
+</form>

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="4c72a97a-428b-4d0a-be82-9fa9bc9bb07a" solutionId="4c72a97a-428b-4d0a-be82-9fa9bc9bb07a" resetWebServer="false" sharePointProductVersion="15.0" name="SeaBoardARApp" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="14274ee8-e166-49ef-98c2-a724a11819a7" />
+  </features>
+</package>

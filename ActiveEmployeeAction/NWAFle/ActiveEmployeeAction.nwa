@@ -1,0 +1,31 @@
+﻿<!-- ActiveEmployeeAction.nwa
+
+    Nintex Workflow 2013 action definition (.nwa) file
+
+    This XML file provides the metadata needed by Nintex Workflow 2013 to register the 
+    workflow action and ensure that the workflow action is linked to the SharePoint 
+    workflow activity wrapped by the workflow action adapter.
+
+    For more information about the elements contained in this file, see the 
+    Nintex Workflow 2013 Software Development Kit documentation.
+
+    Copyright (c) 2015 – Nintex UK Ltd. All Rights Reserved.  
+    This code released under the terms of the 
+    Microsoft Reciprocal License (MS-RL, http://opensource.org/licenses/MS-RL.html.)
+
+-->
+<NintexWorkflowActivity>
+	<Name>Active Employee</Name>
+	<Category>Custom Actions</Category>
+	<Description>Checks whether an employee is active or not</Description>
+	<ActivityType>ActiveEmployeeAction.IsActiveEmployeeActivity</ActivityType>
+	<ActivityAssembly>ActiveEmployeeAction, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f4377886582ac619</ActivityAssembly>
+	<AdapterType>ActiveEmployeeAction.ActiveEmployeeActionAdapter</AdapterType>
+	<AdapterAssembly>ActiveEmployeeAction, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f4377886582ac619</AdapterAssembly>
+	<HandlerUrl>ActivityServer.ashx</HandlerUrl>
+	<Icon>/_layouts/NintexWorkflow/CustomActions/ActiveEmployeeAction/Images/LIcon.png</Icon>
+	<ToolboxIcon>/_layouts/NintexWorkflow/CustomActions/ActiveEmployeeAction/Images/SIcon.png</ToolboxIcon>
+	<ConfigurationDialogUrl>CustomActions/ActiveEmployeeAction/ActiveEmployeeActionDialog.aspx</ConfigurationDialogUrl>
+	<ShowInCommonActions>yes</ShowInCommonActions>
+	<DocumentLibrariesOnly>no</DocumentLibrariesOnly>
+</NintexWorkflowActivity>

@@ -1,0 +1,170 @@
+﻿@model SB.AR.AppWeb.ViewModels.PurchaseWDFinancialsViewModel
+<form id="arfrm" method="post" action="/financials/savear" enctype="application/x-www-form-urlencoded">
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.HiddenFor(m => Model.AR.ID)
+    <input type="hidden" name="IsFinanceTab" value="true">
+    <ul class="row narrative-bottom-area">
+        <li>
+            <div class="col-sm-11" style="width:94.5%;">
+                <label style="width:100%">Condition of Assets / Reason for Disposal<span class="mandatory">*</span></label>
+                @Html.TextAreaFor(m => m.Condition_of_Assets, new { required = "required", id = "ConditionOfAssets" })
+            </div>
+            <div class="col-sm-1" style="padding-top: 131px; padding-left: 0px; width: 5.5%;">
+                @{
+                    ASPNetSpell.Razor.SpellButton btnSpellButtonPresentSituationIssue = new ASPNetSpell.Razor.SpellButton();
+                    btnSpellButtonPresentSituationIssue.InstallationPath = ("/Content/ASPNetSpellInclude");
+                    btnSpellButtonPresentSituationIssue.FieldsToSpellCheck = "ConditionOfAssets";
+                }
+                @Html.Raw(btnSpellButtonPresentSituationIssue.getHtml())
+            </div>
+        </li>
+        <li class="col-sm-6 financial-top-area">
+            <div class="vertical-middle">
+                <label>Original Cost</label>
+                @Html.EditorFor(model => model.Original_Cost, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+
+            </div>
+            <div class="vertical-middle">
+                <label>Market Value</label>@Html.EditorFor(model => model.Market_Value, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Current Net Book Value</label>
+                @Html.EditorFor(model => model.Current_Net_Book_Value, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Expected Proceeds<span class="mandatory">*</span></label>
+                @Html.EditorFor(model => model.Expected_Proceeds, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Purchase Price<span class="mandatory">*</span></label>
+                @Html.EditorFor(model => model.Purchase_Price, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "" } })
+            </div>
+            <div class="vertical-middle">
+                <label>TAX/VAT</label>
+                @Html.EditorFor(model => model.TaxVAT, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Services/ Installation</label>
+                @Html.EditorFor(model => model.ServicesInstallation, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Other Cost or Savings</label>
+                @Html.EditorFor(model => model.Other_Cost_or_Savings, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+        </li>
+        <li class="col-sm-6 financial-top-area">
+       
+
+            <div class="vertical-middle dcc-list">
+                <div class="width">
+                    <label class="">Date Acquired</label>
+                </div>
+                <div class='IE input-group date datetimepicker width ' style="width: 54%;">
+                    @Html.TextBoxFor(m => m.Date_Aquired, new { @class = "left5 LabelFulll form-control forms br-none", @placeholder = "MM-DD-YYYY" })
+                    <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+                <div class='nonIE input-group date datetimepicker width ' id='' style=" width: 53%; margin-left: -15px;">
+                    @Html.TextBoxFor(m => m.Date_Aquired, new { @class = "left5 LabelFulll form-control forms br-none", @placeholder = "MM-DD-YYYY" })
+                    <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+
+
+            <div class="vertical-middle">
+                <label>Department to Change</label>
+                @Html.EditorFor(m => m.Department_to_Charge, new { placeholder = "Department to Charge Name" })
+            </div>
+            <div class="vertical-middle dcc-list">
+                <label class="labels">Investment Type</label>
+                @Html.DropDownListFor(m => m.InvestmentType, new SelectList(Model.InvestmentTypes, "Value", "Text"),
+                                           new { @id = "arCategory", @class = " selectpicker select", @data_width = "53%", @title = "Capital" })
+            </div>
+            <div class="vertical-middle">
+                <label>Economical Life</label>
+                @Html.EditorFor(m => m.Economical_Life, new { placeholder = "Economical Life" })
+            </div>
+        </li>
+        <li class="col-sm-12 total-cost-highlight">
+            <div class="row">
+                <div class="col-sm-6 financial-top-area">
+                    <div class="vertical-middle total-cost-wrapper">
+                        <label><b>Total Cost</b></label>
+                        @Html.EditorFor(m => m.Total_Cost, new { htmlAttributes = new { @class = "greyBold number", @required = "required", @type = "text", @min = "0" } })
+                    </div>
+                    <div class="vertical-middle">
+                        <label>Budget Amount</label>
+                        @Html.EditorFor(m => m.Budget_Amount, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "0" } })
+                    </div>
+                </div>
+                <div class="col-sm-6 financial-top-area">
+                    <div class="budget-line-item">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div>
+                                    <label class="LabelFulll">Budget Line Item #</label>
+                                    @Html.EditorFor(m => m.BudgetLineItem, new { htmlAttributes = new { @type = "text", @class = "LabelFulll" } })
+                                </div>
+                            </div>
+                            <div class="col-sm-6 budget-checkbox">
+                                <div class="checkbox">
+                                    <label for="In_Budget" class="CheckBoxLable css-label">In Budget</label>
+                                    @Html.CheckBoxFor(m => m.In_Budget, new { })
+                                </div>
+                                <div class="checkbox">
+                                    <label for="Funds_Committed" class="CheckBoxLable css-label">Funds Commited</label>
+                                    @Html.CheckBoxFor(m => m.Funds_Committed, new { })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <script src="~/Scripts/Seaboard/CurrencyFormatter.js"></script>
+    <script type="text/javascript">
+       
+
+        $(document).ready(function () {
+            var height = $(window).height();
+            $(".inner-container").css("height", height + 700 + "px");
+            $('.datetimepicker').datetimepicker({ format: 'MM-DD-YYYY' });
+            $('.selectpicker').selectpicker();
+
+            totalCostCalculate();
+            function totalCostCalculate() {
+                var purPrice = $("#Purchase_Price").val();
+                purPrice = purPrice.replace("$", "");
+                if (purPrice == "")
+                    purPrice = "0";
+
+                var taxVat = $("#TaxVAT").val();
+                taxVat = taxVat.replace("$", "");
+                if (taxVat == "")
+                    taxVat = "0";
+
+                var services = $("#ServicesInstallation").val();
+                services = services.replace("$", "");
+                if (services == "")
+                    services = "0";
+
+                var otherCosts = $("#Other_Cost_or_Savings").val();
+                otherCosts = otherCosts.replace("$", "");
+                if (otherCosts == "")
+                    otherCosts = "0";
+
+                // remove the commas from the field. The field type is currency - string.replace(/[\,]/g, '')
+                var total = parseFloat(purPrice.replace(/[\,]/g, '')) + parseFloat(taxVat.replace(/[\,]/g, '')) + parseFloat(services.replace(/[\,]/g, '')) + parseFloat(otherCosts.replace(/[\,]/g, ''));
+
+                SetTotalCost(total);
+            }
+
+            $("#Purchase_Price,#TaxVAT,#ServicesInstallation,#Other_Cost_or_Savings").blur(function () {
+
+                totalCostCalculate();
+            });
+        });
+    </script>
+</form>

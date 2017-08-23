@@ -1,0 +1,53 @@
+﻿@model SB.AR.AppWeb.ViewModels.ApprovalViewModel
+@{
+    
+    int index = 0;// Model.GetAllCompanyApprovers.Count;
+    foreach (var workFlow in Model.AllApprovals)
+    {
+        index++;
+        var startDate = string.Format("{0:MM/dd/yyyy}", workFlow.StartDate);
+        var dateApproved = string.Format("");
+
+        var currentUser = Model.CurrentUser.Title;
+        var status = workFlow.Status;
+        var isMyTask = false;
+        var outcome = workFlow.WorkflowOutcome;
+
+        if (currentUser.Trim() == workFlow.AssignedTo.Trim() && !status.Trim().ToLower().Equals("completed") && !status.Trim().ToLower().Equals("deferred"))
+        {
+            isMyTask = true;
+            status = "Approve/Reject";
+        }
+        if (status.Trim().ToLower().Equals("completed") && (outcome.Trim().ToLower().Equals("reject") || outcome.Trim().ToLower().Equals("rejected") || outcome.Trim().ToLower().Equals("approve") || outcome.Trim().ToLower().Equals("approved")))
+        {
+            dateApproved = string.Format("{0:MM/dd/yyyy}", workFlow.DateApproved);
+        }
+       
+        if (status != "Completed")
+            {
+              <tr>
+           
+                <td>@workFlow.RoleName</td>
+                <td>@workFlow.AssignedTo</td>
+                @if (!isMyTask)
+                {
+                    <td>@status</td>
+                }
+                else
+                {
+                    <td>
+                        <a href='#' class="btn primary-btn" onclick="LoadApprovalScreen(@workFlow.ID)">@status</a>
+                    </td>
+                }
+                <td>@startDate</td>
+                <td>@dateApproved</td>
+            </tr>
+            }
+      
+      
+    }
+
+
+
+}
+

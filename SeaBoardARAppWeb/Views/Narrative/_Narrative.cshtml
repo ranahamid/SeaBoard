@@ -1,0 +1,146 @@
+﻿@model SB.AR.AppWeb.ViewModels.NarrativeViewModel
+<style>
+    .main-box-wrapper label {
+        width: auto !important;
+    }
+</style>
+
+<form id="arfrm" method="post" action="/narrative/savear" enctype="application/x-www-form-urlencoded">
+    @{
+        var totalCost = String.Format("{0:C}", Model.Total_Cost);
+    }
+    <input type="hidden" name="CrntTab" id="CrntTab" value="/narrative/savear">
+    <div class="tab-content">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <div id="narrativetab" class="tab-pane fade in active">
+            <ul class=" created-wrapper narrative-top-area">
+                <li class="col-sm-12">
+                    <label>AR Title:</label>
+                    <div>
+                        <input type="hidden" name="id" value="@Model.ID">
+                        <span style="font-weight: bold !important; color: #009FE3;">@Model.Title</span>
+                    </div>
+                </li>
+                <li class="col-sm-4">
+                    <label>AR ID:</label>
+                    <span>@Model.AR_ID</span>
+                </li>
+                <li class="col-sm-4">
+                    <label>AR Type:</label>
+                    <span>@Model.AR_Type</span>
+                </li>
+                <li class="col-sm-4">
+                    <label>Current Status:</label>
+                    <span>@Model.Current_Status</span>
+                </li>
+                <li class="col-sm-4">
+                    <label><b>Total Cost:</b></label>
+                    <label><b>@totalCost</b></label>
+                </li>
+                <li class="col-sm-4">
+                    <label>Division:</label>
+                    <label>@Model.DivisionName</label>
+                </li>
+                <li class="col-sm-4">
+                    <label>Company:</label>
+                    <label>@Model.CompanyName</label>
+                </li>
+            </ul>
+            <ul class=" narrative-bottom-area">
+                <li>
+                    <div class="col-sm-11" style="width:94.5%;">
+                        <label>Present Situation/Issue<span class="mandatory">*</span></label>
+                        @Html.TextAreaFor(m => m.PresentSituationIssue, new { required = "required", id = "presentSituationIssue", disable_output_escaping = "yes" })
+                    </div>
+                    <div class="col-sm-1" style="padding-top: 131px; padding-left: 0px; width: 5.5%;">
+                        @{
+                            ASPNetSpell.Razor.SpellButton btnSpellButtonPresentSituationIssue = new ASPNetSpell.Razor.SpellButton();
+                            btnSpellButtonPresentSituationIssue.InstallationPath = ("/Content/ASPNetSpellInclude");
+                            btnSpellButtonPresentSituationIssue.FieldsToSpellCheck = "presentSituationIssue";
+                        }
+                        @Html.Raw(btnSpellButtonPresentSituationIssue.getHtml())
+                    </div>
+                </li>
+                <li>
+                    <div class="col-sm-11" style="width:94.5%;">
+                        <label>Proposed Solution<span class="mandatory">*</span></label>
+                        @Html.TextAreaFor(m => m.Proposed_Solution, new { required = "required", id = "proposedSolution" })
+                    </div>
+                    <div class="col-sm-1" style="padding-top: 131px; padding-left: 0px; width: 5.5%;">
+                        @{
+                            ASPNetSpell.Razor.SpellButton btnSpellButton2 = new ASPNetSpell.Razor.SpellButton();
+                            btnSpellButton2.InstallationPath = ("/Content/ASPNetSpellInclude");
+                            btnSpellButton2.FieldsToSpellCheck = "proposedSolution";
+
+                        }
+                        @Html.Raw(btnSpellButton2.getHtml())
+                    </div>
+                </li>
+                <li>
+                    <div class="col-sm-11" style="width:94.5%;">
+                        <label>Other Potential Solutions<span class="mandatory">*</span></label>
+                        @Html.TextAreaFor(m => m.Other_Potential_Solutions, new { required = "required", id = "otherPotentialSolutions" })
+                    </div>
+                    <div class="col-sm-1" style="padding-top: 131px; padding-left: 0px; width: 5.5%;">
+                        @{
+                            ASPNetSpell.Razor.SpellButton btnSpellButton3 = new ASPNetSpell.Razor.SpellButton();
+                            btnSpellButton3.InstallationPath = ("/Content/ASPNetSpellInclude");
+                            btnSpellButton3.FieldsToSpellCheck = "otherPotentialSolutions";
+
+                        }
+                        @Html.Raw(btnSpellButton3.getHtml())
+                    </div>
+                </li>
+                <li>
+                    <div class="col-sm-11" style="width:94.5%;">
+                        <label>Explanation of Costs<span class="mandatory">*</span></label>
+                        @Html.TextAreaFor(m => m.Explanation_of_Costs, new { required = "required", id = "explanationofCosts" })
+                    </div>
+                    <div class="col-sm-1" style="padding-top: 131px; padding-left: 0px; width: 5.5%;">
+                        @{
+                            ASPNetSpell.Razor.SpellButton btnSpellButton4 = new ASPNetSpell.Razor.SpellButton();
+                            btnSpellButton4.InstallationPath = ("/Content/ASPNetSpellInclude");
+                            btnSpellButton4.FieldsToSpellCheck = "explanationofCosts";
+
+                        }
+                        @Html.Raw(btnSpellButton4.getHtml())
+                    </div>
+                </li>
+                <li>
+                    <div class="col-sm-11" style="width:94.5%;">
+                        <label>Financial Measures</label>
+                        @Html.TextAreaFor(m => m.Financial_Measures, new { id = "financialMeasures" })
+
+                    </div>
+                    <div class="col-sm-1" style="padding-top: 131px; padding-left: 0px; width: 5.5%;">
+                        @{
+                            ASPNetSpell.Razor.SpellButton btnSpellButton5 = new ASPNetSpell.Razor.SpellButton();
+                            btnSpellButton5.InstallationPath = ("/Content/ASPNetSpellInclude");
+                            btnSpellButton5.FieldsToSpellCheck = "financialMeasures";
+
+                        }
+                        @Html.Raw(btnSpellButton5.getHtml())
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div id="btngrpDiv"></div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var height = $(window).height();
+        $(".inner-container").css("height", height+200 + "px");
+        LoadBtnPartial('/home/buttons');
+    });
+    function LoadBtnPartial(path) {
+        $("#btngrpDiv").load(path, { currenttab: "narrative", idPrev: "maintab", idNext: "financials", controller: '/narrative/savear' }, function (responseTxt, statusTxt, xhr) {
+            if (statusTxt == "success") {
+            }
+            else if (statusTxt == "error")
+                alert("Error: " + xhr.status + ": " + xhr.statusText);
+        });
+
+    }
+</script>

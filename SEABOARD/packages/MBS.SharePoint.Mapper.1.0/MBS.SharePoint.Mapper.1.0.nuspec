@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>MBS.SharePoint.Mapper</id>
+    <version>1.0</version>
+    <title>MBS.SharePoint.Mapper</title>
+    <authors>Mohammad Bagher Seifollahi</authors>
+    <owners>Mohammad Bagher Seifollahi</owners>
+    <licenseUrl>http://spmapper.mb-seifollahi.ir/#privacy</licenseUrl>
+    <projectUrl>http://spmapper.mb-seifollahi.ir/</projectUrl>
+    <iconUrl>http://spmapper.mb-seifollahi.ir/images/logo32.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>you can work with Server Object Model and do CRUD (also pagination) actions as easy as drinking a glass of water (more at http://spmapper.mb-seifollahi.ir/v1001/ )</description>
+    <summary />
+    <tags>MBS SharePoint SPMapper Pagination Paging Mapper</tags>
+  </metadata>
+</package>

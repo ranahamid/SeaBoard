@@ -1,0 +1,331 @@
+﻿@model SB.AR.AppWeb.ViewModels.MaintabViewModel
+<form id="arfrm" method="post" action="/maintab/savear" enctype="application/x-www-form-urlencoded" class="form-horizontal">
+   
+    <!--[if IE]><!-->
+
+    <style type="text/css">
+        .dcc-list {
+           width:100%;
+        }
+
+        .label90 {
+            width: 90% !important;
+        }
+        .width53 {
+            width: 53% !important;
+        }
+        .LabelFulll {
+            width: 100% !important;
+        }
+
+        .main-box-wrapper label {
+            width: 35% ;
+        }
+        .tt-input.loading {
+            background: transparent url('/content/images/ajaxloading.gif') no-repeat scroll right center content-box !important;
+        }
+    </style>
+
+    <!--<![endif]-->
+    <div id="maintab" class="tab-pane fade in active">
+        <ul>
+            <li>
+                <label>AR Title:<span class="mandatory">*</span></label>
+                <input type="hidden" name="ID" value="@Model.ID">
+                
+                <input type="hidden" name="IsMaintab" value="true">
+                <input type="hidden" name="CrntTab" id="CrntTab" value=" /maintab/savear">
+                <input type="hidden" name="SPHostUrl" value="@Model.AR.SPHostUrl">
+                <input type="hidden" name="SPAppWebUrl" value="@Model.AR.SPAppWebUrl">
+                <input type="hidden" name="SPLanguage" value="@Model.AR.SPLanguage">
+                <input type="Text" style="width:97%"  name="title" placeholder="" value="@Model.Title" required>
+            </li>
+        </ul>
+        <ul class="row created-wrapper">
+            <li class="col-sm-6">
+                <label style="min-width:180px; ">Local AR Number:</label>
+                @Html.TextBoxFor(m => m.LocalAR, new { @class="width53"})
+            </li>
+            <li class="col-sm-6" >
+                <label style="min-width: 135px; color: #999 !important; ">AR Number:</label>
+                @Html.TextBoxFor(m => m.AR_ID, new { @class = "greyBold width53" })
+            </li>
+            <li class="col-sm-6" style="margin-top:15px;">
+                <label style=" width: auto !important;">Created:</label>
+                @{
+                    if (Model.AR.Author != null)
+                    {
+                        <span>@Model.AR.Author.Value</span>
+                    }
+                }
+            </li>
+        </ul>
+        <ul class="three-block">
+
+            <li class="col-md-6">
+                <div class="dcc-list">
+                    <label class="labels " style="width: 20%;">Division<span class="mandatory">*</span></label>
+                    @Html.DropDownListFor(m => m.DivisionId, new SelectList(Model.Division, "Value", "Text"),
+                             new { @id = "arDivision", @class = "transNone selectpicker select division", @data_width = "65%", @title = "Select Division", @onchange = "FillCompany()" })
+                    
+                </div>
+                <p style="font-size: 9px; margin-left: 2px; float: right; margin-right: 14%;">Please, select Division first</p>
+
+            </li>
+
+            <li class="col-md-6">
+                <div class="dcc-list" id="company">
+                    @Html.Partial("_CompanyList", new SB.AR.AppWeb.ViewModels.CompanyMasterViewModel(Model.SharePointContext) { CompanyId = (int)Model.CompanyId, DivisionId = (int)Model.DivisionId })
+                </div>
+            </li>
+            <li class="col-md-6">
+                <div class="dcc-list">
+                    <label class="labels" style="width: 20%;">Category</label>
+                    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Value", "Text"),
+                    new { @id = "arCategory", @class = " selectpicker select", @data_width = "65%", @title = "Select Category" })
+                </div>
+            </li>
+            <li class="col-md-6">&nbsp;</li>
+</ul>
+
+        <ul class="three-block">
+            @*<li class="col-sm-4">
+                <div class="dcc-list">
+                    <label class="labels ">Division<span class="mandatory">*</span></label> 
+                    @Html.DropDownListFor(m => m.DivisionId, new SelectList(Model.Division, "Value", "Text"),
+                             new { @id = "arDivision", @class = "transNone selectpicker select", @data_width = "65%", @title = "Select Division", @onchange = "FillCompany()" })
+                </div>
+                <div class="dcc-list" id="company">
+                    @Html.Partial("_CompanyList", new SB.AR.AppWeb.ViewModels.CompanyMasterViewModel(Model.SharePointContext) { CompanyId = (int)Model.CompanyId, DivisionId = (int)Model.DivisionId })
+                </div>
+                <div class="dcc-list">
+                    <label class="labels">Category</label>
+                    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Value", "Text"),
+                    new { @id = "arCategory", @class = " selectpicker select", @data_width = "65%", @title = "Select Category" })
+                </div>
+            </li>*@
+            <li class="col-sm-6 checkbox-list">
+                <div class="">
+                    <label for="Engineering_Review" class="label90 css-label">Engineering Review</label>
+                    @Html.CheckBoxFor(x => x.Engineering_Review, new { })
+                </div>
+                <div class="">
+                    <label for="HR_Review" class="label90 css-label">HR Review</label>
+                    @Html.CheckBoxFor(m => m.HR_Review, new { })
+                </div>
+                <div class="">
+                    <label for="IT_Review" class="label90 css-label">IT Review</label>
+                    @Html.CheckBoxFor(x => x.IT_Review, new { })
+                </div>
+                <div class="">
+                    <label for="Legal_Review" class="label90 css-label">Legal Review</label>
+                    @Html.CheckBoxFor(x => x.Legal_Review, new { })
+                </div>
+            </li>
+            <li class="col-sm-6">
+                <div class="dcc-list">
+                    <label class="">Location</label>
+                    <div>
+                        @Html.TextBoxFor(m => m.Location, new { placeholder = "", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="dcc-list">
+                    <label class="">PM/Owner<span class="mandatory">*</span></label>
+                    @Html.HiddenFor(m => m.PMOwner)
+                    <div style="float:left">
+                        @Html.AutocompleteFor(m => m.LookupValue, m => m.LookupId, "PeoplePickerJson", "Maintab", false, new { htmlAttributes = new { @class = "form-control tt-hint" } })
+                    </div>
+                    <div style="float:right; display: none;" id="pplLoder">
+                        <img src="~/Content/Images/ajax-loader.gif"/>
+                    </div>
+                </div>
+                <div style="clear:both;">
+                    <div class="row" id="pm-date">
+                        <div class="col-sm-6">
+                            <label class="LabelFulll">Project Start</label>
+                            <div class='input-group date datetimepicker' id=''>
+                                @Html.EditorFor(m => m.Project_Start, new { @type = "datetime", @class = "form-control forms br-none", @placeholder = "MM-DD-YYYY" })
+                                <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label class="LabelFulll">Project End</label>
+                            <div class='input-group date datetimepicker' id=''>
+                                @Html.EditorFor(m => m.Project_End, new { @type = "datetime", @class = "form-control forms br-none", @placeholder = "MM-DD-YYYY" })
+                                <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                        <div id="message-date" style="display:none;">
+                            <label class="error" for="Project_Start">Please check project start and end date.</label>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>         
+        <ul class="three-block flagARClass" style="display:none;">
+            <li class="col-sm-7 checkbox-list">
+                <div class="">                    
+                    @Html.HiddenFor(x => x.Audit)
+                    Flag this AR for future Audit? @Html.CheckBoxFor(x => x.Audit, new { @onclick = "SaveFlagAR(this);", @class ="FlagARCheckbox" })
+                    @Html.TextBoxFor(m => m.Audit_Updated_By, new { @data_width = "100%", @class = "FlagARTextbox", @disabled = "disabled" })
+                </div>
+            </li> 
+            <li class="col-sm-5 checkbox-list">
+                &nbsp;
+            </li>           
+        </ul>
+         
+            <div id="btngrpDiv"></div>
+</div>
+    <script src="~/Scripts/typeahead.bundle.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/typeahead.jquery.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/typeahead.mvc.model.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+            var height = $(window).height();
+            $(".inner-container").css("height", height-100 + "px");
+            $("#AR_ID").attr('readonly', true);
+            
+            $("#Project_Start, #Project_End").focus(function () {
+                $("#message-date").hide();
+            });
+            $("#Project_Start, #Project_End").blur(function () {
+                clicked_id = (this.id);
+                var start = $("#Project_Start").val();
+                var end = $("#Project_End").val();
+                if (start == '' || end == '')
+                    return;
+                else {
+                    var startDate = new Date(start);
+                    var endDate = new Date(end);
+                    if (startDate !== undefined && endDate !== undefined) {
+                        if (startDate > endDate) {
+                            $("#message-date").show();
+                            $("#" + clicked_id).val('');
+                        }
+                    }
+                }
+            });
+            LoadBtnPartial('/home/buttons');
+            $('.selectpicker').selectpicker();
+
+            // Check if Flag AR controls are to be shown based on business logic.
+            ShowFlagARControls();
+        });
+        function LoadBtnPartial(path) {
+            $("#btngrpDiv").load(path, { currenttab: "main", idPrev: "entry", idNext: "narrative", controller: '/maintab/savear' }, function (responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success") {}
+                else if (statusTxt == "error")
+                    alert("Error: " + xhr.status + ": " + xhr.statusText);
+            });
+        }
+
+        function FillCompany() {
+            var Id = $('#arDivision').val();
+            $("#company").empty();
+            $("#company").load('/Maintab/FillCompany', { divisionId: Id }, function (responseTxt, statusTxt, xhr)
+            {
+                var division = $('.division :selected').val();
+                if (division > 0)
+                    $('.company').removeAttr('disabled');                
+            });
+            
+        }
+
+        function ShowFlagARControls()
+        {
+            var ar_status = '@Model.AR.Current_Status';
+            var ar_Audit = '@Model.AR.Audit';
+            
+            if(ar_status == 'Pending Approvals')
+            {
+                GetFlagUserIDs();
+                //$('.flagARClass').show();
+            }
+            else
+            {
+                $('.FlagARCheckbox').prop('disabled', true);
+                $('.FlagARCheckbox').attr('readonly', true);
+            }
+        }
+
+        function GetFlagUserIDs()
+        {
+            
+            $.ajax({
+                type: 'GET',
+                url: '/Maintab/GetFlagUserIDs',
+                data: { },
+                dataType: 'json',
+                async: false,
+                success: function (returnObj) {
+                    
+                    if (returnObj == "1")
+                    {                        
+                        if ($('.FlagARCheckbox').attr('checked') == 'checked')
+                        {
+                            $('.FlagARCheckbox').prop('disabled', true);
+                            $('.FlagARCheckbox').attr('readonly', true);
+                        }
+                        else
+                        {
+                            //console.log('2');
+                            $('.FlagARCheckbox').removeAttr('readonly');
+                        }
+
+                        $('.flagARClass').show();
+                    }
+                    else
+                    {
+                        $('.flagARClass').hide();
+                        //console.log('hide this');
+                        $('.FlagARCheckbox').prop('disabled', true);
+                        $('.FlagARCheckbox').attr('readonly', true);
+                    }
+                    $.unblockUI();
+                },
+                complete: function () {
+                    // unblock when remote call returns
+                    
+                    $.unblockUI();
+                },
+                error: function (err) {
+                    
+                    $.unblockUI();
+                }
+            });
+        }
+
+        function SaveFlagAR(flagCheckBox)
+        {
+            
+            if (flagCheckBox.checked)
+            {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Maintab/SaveFlagARToList',
+                    data: {
+                        arid : '@Model.AR.ID'
+                    },
+                    dataType: 'json',
+                    async: false,
+                    success: function (returnObj) {                        
+                        $('.FlagARTextbox').val(returnObj.Data.user);
+                        $('.FlagARCheckbox').prop('disabled', true);
+                        $('.FlagARCheckbox').attr('readonly', true);
+                        $.unblockUI();
+                    },
+                    complete: function () {
+                        // unblock when remote call returns
+                        $.unblockUI();
+                    },
+                    error: function () {
+                        $.unblockUI();
+                    }
+                });
+            }          
+        }
+    </script>
+</form>

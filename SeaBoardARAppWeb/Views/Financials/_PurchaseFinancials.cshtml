@@ -1,0 +1,124 @@
+﻿@model SB.AR.AppWeb.ViewModels.PurchaseFinancialsViewModel
+<form id="arfrm" method="post" action="/financials/savear" enctype="application/x-www-form-urlencoded">
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <input type="hidden" value="@Model.AR.ID" name="id" />
+    <input type="hidden" name="IsFinanceTab" value="true">
+    <ul class="row narrative-bottom-area">
+        <li class="col-sm-6 financial-top-area">
+            <div class="vertical-middle">
+                <label>Purchase Price<span class="mandatory">*</span></label>
+                @Html.EditorFor(model => model.Purchase_Price, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "" } })
+            </div>
+            <div class="vertical-middle">
+                <label>TAX/VAT</label>
+                @Html.EditorFor(m => m.TaxVAT, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Services/ Installation</label>
+                @Html.EditorFor(m => m.ServicesInstallation, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Other Cost or Savings</label>
+                @Html.EditorFor(m => m.Other_Cost_or_Savings, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+        </li>
+        <li class="col-sm-6 financial-top-area">
+            <div class="vertical-middle dcc-list">
+                <label class="labels">Investment Type</label>
+                @Html.DropDownListFor(m => m.InvestmentType, new SelectList(Model.InvestmentTypes, "Value", "Text"),
+                                  new { @id = "artype", @class = "selectpicker select", @data_width = "53%", @title = "Select Investment Type" })
+            </div>
+            <div class="vertical-middle">
+                <label>Economical Life</label>
+                @Html.EditorFor(m => m.Economical_Life, new { @placeholder = "some econ." })
+            </div>
+        </li>
+        <li class="col-sm-12 total-cost-highlight">
+            <div class="row">
+                <div class="col-sm-6 financial-top-area">
+                    <div class="vertical-middle total-cost-wrapper">
+                        <label ><b>Total Cost</b></label>
+                        @Html.EditorFor(m => m.Total_Cost, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number greyBold", @min = "0", @readonly = "true" } })
+                    </div>
+                    <div class="vertical-middle">
+                        <label >Budget Amount</label>
+                        @Html.EditorFor(m => m.Budget_Amount, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "0" } })
+                    </div>
+                </div>
+                <div class="col-sm-6 financial-top-area">
+                    <div class="budget-line-item">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div>
+                                    <label class="LabelFulll">Budget Line Item #</label>
+                                    @Html.EditorFor(m => m.BudgetLineItem, new { htmlAttributes = new { @type = "text",@class="LabelFulll" } })
+                                </div>
+                            </div>
+                            <div class="col-sm-6 budget-checkbox">
+                                <div class="">
+                                    <label for="In_Budget" class="CheckBoxLable css-label">In Budget</label>
+                                    @*@Html.CheckBoxFor(m => m.In_Budget, new { })*@
+                                    @Html.EditorFor(x => x.In_Budget)
+                                </div>
+                                <div class="">
+                                    <label for="Funds_Committed" class="CheckBoxLable css-label">Funds Commited</label>
+                                   @* @Html.CheckBoxFor(m => m.Funds_Committed, new { })*@
+                                    @Html.EditorFor(x => x.Funds_Committed)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <script src="~/Scripts/Seaboard/CurrencyFormatter.js"></script>
+
+    <script type="text/javascript">
+       
+
+        $(function ()
+        {
+            $('.datetimepicker').datetimepicker({ format: 'MM-DD-YYYY' });
+            $('.selectpicker').selectpicker();
+
+            totalCostCalculate();
+            function totalCostCalculate()
+            {
+                //debugger;
+
+                var purPrice = $("#Purchase_Price").val();
+                purPrice = purPrice.replace("$", "");
+                if (purPrice == "")
+                    purPrice = "0";
+
+                var taxVat = $("#TaxVAT").val();
+                taxVat = taxVat.replace("$", "");
+                if (taxVat == "")
+                    taxVat = "0";
+
+                var services = $("#ServicesInstallation").val();
+                services = services.replace("$", "");
+                if (services == "")
+                    services = "0";
+
+                var otherCosts = $("#Other_Cost_or_Savings").val();
+                otherCosts = otherCosts.replace("$", "");
+                if (otherCosts == "")
+                    otherCosts = "0";
+
+                // remove the commas from the field. The field type is currency - string.replace(/[\,]/g, '')
+                var total = parseFloat(purPrice.replace(/[\,]/g, '')) + parseFloat(taxVat.replace(/[\,]/g, '')) + parseFloat(services.replace(/[\,]/g, '')) + parseFloat(otherCosts.replace(/[\,]/g, ''));
+
+                SetTotalCost(total);
+            }
+            $("#Purchase_Price,#TaxVAT,#ServicesInstallation,#Other_Cost_or_Savings").blur(function ()
+            {
+                totalCostCalculate();
+            });
+
+        });
+    </script>
+</form>

@@ -1,0 +1,796 @@
+﻿@model SB.AR.AppWeb.ViewModels.ApprovalViewModel
+<style>
+    .main-box-wrapper label {
+        width: auto !important;
+    }
+</style>
+<div id="approvalstab" class="tab-pane fade in active">
+    @{
+        var totalCost = String.Format("{0:C}", Model.AR.Total_Cost);
+    }
+
+    <ul class=" created-wrapper narrative-top-area">
+        <li class="col-sm-12">
+            <label>AR Title:</label>
+            <span style="font-weight: bold !important; color: #009FE3;">@Model.AR.Title</span>
+        </li>
+        <li class="col-sm-4">
+            <label>AR ID:</label>
+            <span>@Model.AR.AR_ID</span>
+        </li>
+        <li class="col-sm-4">
+            <label>AR Type:</label>
+            <span>@Model.AR.AR_Type</span>
+        </li>
+        <li class="col-sm-4">
+            <label>Current Status:</label>
+            <span>@Model.AR.Current_Status</span>
+        </li>
+        <li class="col-sm-4">
+            <label><b>Total Cost:</b></label>
+            <span><b>@totalCost</b></span>
+        </li>
+
+        <li class="col-sm-4">
+            <label>Division:</label>
+            <label>@Model.DivisionName</label>
+        </li>
+        <li class="col-sm-4">
+            <label>Company:</label>
+
+            <label>@Model.CompanyName</label>
+        </li>
+    </ul>
+    <div class="">
+        <div class="col-sm-12">
+            <div class="approvals-table-wrapper">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Date Assigned</th>
+                            <th>Date Approved</th>
+                        </tr>
+                    </thead>
+                    <tbody id="approvList">
+                        @Html.Partial("_ApprovalList", Model)
+                    </tbody>
+                </table>
+                
+
+                @{
+                    var ApprovalsHistory = Model.GetApprovalsHistory;
+
+                    if (ApprovalsHistory.Count > 0)
+                    {
+                       <div id="Approvers">
+                                <div class="three-block-table">
+                                    <h3>
+                                        Next Approvers
+                                    </h3>
+                                </div>
+                                <table class="table table-bordered" id="">
+                                    <thead>
+                                        <tr>
+                                          
+                                            <th>Title</th>
+                                            <th>Approver</th>
+                                            <th>Task Status</th>
+                                            <th>Date Assigned</th>
+                                            <th>Date Completed</th>
+                                            @*<th>Sequence</th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ApprovalsHistoryTbl">
+
+
+                                        @foreach (var approver in ApprovalsHistory)
+                                        {
+
+                                            <tr>
+                                               
+                                                <td>@approver.Title</td>
+                                                <td>@approver.Approver</td>
+                                                <td>@approver.Task_Status</td>
+                                                <td>
+                                                    @if (default(DateTime) != approver.Date_Assigned)
+                                                    {
+                                                        var assigned = string.Format("{0:MM/dd/yyyy}", @approver.Date_Assigned);
+                                                        @assigned;
+                                                    }
+                                                    
+                                                </td>
+                                                <td>
+                                                    @if (default(DateTime) != approver.Date_Completed)
+                                                    {
+                                                        var completed = string.Format("{0:MM/dd/yyyy}", @approver.Date_Completed);
+                                                        @completed
+                                                    }
+                                                </td>
+                                                @*<td>@approver.Sequence</td>*@
+                                            </tr>
+                                        }
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                    }
+                }
+               
+
+                    @*@{
+                        var CompanyApprovers=Model.GetAllCompanyApprovers;
+                        if (CompanyApprovers.Count > 0)
+                        {
+                            <div id="nextApprovers">
+                                <div class="three-block-table">
+                                    <h3>
+                                        Next Approvers
+                                    </h3>
+                                </div>
+                                <table class="table table-bordered" id="GetAllCompanyApproversTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Role</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>Date Assigned</th>
+                                            <th>Date Approved</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="">
+
+
+                                        @foreach (var approver in CompanyApprovers)
+                                        {
+
+                                            if (!string.IsNullOrEmpty(approver.Dept_Reviewer_1))
+                                            {
+
+                                                <tr> <td>Dept_Reviewer_1</td><td> @approver.Dept_Reviewer_1    </td>		<td>Not Assigned</td><td></td><td></td>		   </tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.Dept_Reviewer_2))
+                                            {
+
+                                                <tr><td>Dept_Reviewer_2 </td><td> @approver.Dept_Reviewer_2    </td>	<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.Dept_Reviewer_3))
+                                            {
+
+                                                <tr><td>Dept_Reviewer_3  </td><td> @approver.Dept_Reviewer_3    </td>	<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.Dept_Reviewer_4))
+                                            {
+
+                                                <tr><td>Dept_Reviewer_4</td><td> @approver.Dept_Reviewer_4    </td>		<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.Dept_Reviewer_5))
+                                            {
+
+                                                <tr><td>Dept_Reviewer_5</td><td> @approver.Dept_Reviewer_5    </td>		<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+
+                                            if (!string.IsNullOrEmpty(approver.IT_Reviewer))
+                                            {
+
+                                                <tr><td>IT_Reviewer</td><td> @approver.IT_Reviewer        </td>		<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.HR_Reviewer))
+                                            {
+
+                                                <tr><td>HR_Reviewer</td><td> @approver.HR_Reviewer        </td>		<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.Legal_Reviewer))
+                                            {
+
+                                                <tr><td>Legal_Reviewer </td><td> @approver.Legal_Reviewer     </td>		<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.Ops_Leader))
+                                            {
+
+                                                <tr><td>Ops_Leader</td><td> @approver.Ops_Leader         </td>		<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.Ops_Leader_2))
+                                            {
+
+                                                <tr><td>Ops_Leader_2 </td><td> @approver.Ops_Leader_2       </td>		<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.Ops_Leader_3))
+                                            {
+
+                                                <tr><td>Ops_Leader_3</td><td> @approver.Ops_Leader_3       </td>		<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.Finance_Leader))
+                                            {
+
+                                                <tr><td>Finance_Leader</td><td> @approver.Finance_Leader     </td>		<td>Not Assigned</td><td></td><td></td>			</tr>
+                                            }
+                                            if (!string.IsNullOrEmpty(approver.President))
+                                            {
+
+                                                <tr><td>President</td><td> @approver.President           </td>	<td>Not Assigned</td><td></td><td></td>		    </tr>
+                                            }
+                                        }
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    }*@
+
+                    @*<div id="CorporateApprovers">
+                        <div class="three-block-table">
+                            <h3>
+                                Corporate Approvers
+                            </h3>
+                        </div>
+                        <table class="table table-bordered" id="CorporateTable">
+                            <thead>
+                                <tr>
+                                    <th>Role</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Date Assigned</th>
+                                    <th>Date Approved</th>
+                                </tr>
+                            </thead>
+                            <tbody id="">
+
+
+                                @if (Model.GetAllCorporateApprovers != null)
+                                {
+                                    foreach (var Corapprover in Model.GetAllCorporateApprovers)
+                                    {
+                                        if (!string.IsNullOrEmpty(Corapprover.Corp_IT_Reviewer))
+                                        {
+                                            <tr>
+                                                <td>Corp_IT_Reviewer</td>
+                                                <td> @Corapprover.Corp_IT_Reviewer</td>
+
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var currentUser = Model.CurrentUser.Title;
+                                                    var status = Corapprover.Status;
+                                                    var isMyTask = false;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+
+                                                    if (currentUser.Trim() == Corapprover.AssignedTo.Trim() && !status.Trim().ToLower().Equals("completed") && !status.Trim().ToLower().Equals("deferred"))
+                                                    {
+                                                        isMyTask = true;
+                                                        status = "Approve/Reject";
+                                                    }
+                                                    if (!isMyTask)
+                                                    {
+                                                        <td> @status  </td>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <td>  <a href='#' class="btn primary-btn" onclick="LoadApprovalScreen(@Corapprover.WorkFlowId)">@status</a></td>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td> Not Assigned </td>
+                                                }
+
+
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+
+
+                                                    var startDate = string.Format("{0:MM/dd/yyyy}", Corapprover.DateAssigned);
+                                                    <td>@startDate</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var dateApproved = string.Format("");
+                                                    var status = Corapprover.Status;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+                                                    if (status.Trim().ToLower().Equals("completed") && (outcome.Trim().ToLower().Equals("reject") || outcome.Trim().ToLower().Equals("rejected") || outcome.Trim().ToLower().Equals("approve") || outcome.Trim().ToLower().Equals("approved")))
+                                                    {
+                                                        dateApproved = string.Format("{0:MM/dd/yyyy}", Corapprover.DateApproved);
+                                                    }
+
+                                                    <td>@dateApproved</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                            </tr>
+                                        }
+
+                                        if (!string.IsNullOrEmpty(Corapprover.Corp_HR_Reviewer))
+                                        {
+                                            <tr>
+                                                <td>Corp_HR_Reviewer</td>
+                                                <td> @Corapprover.Corp_HR_Reviewer    </td>
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var currentUser = Model.CurrentUser.Title;
+                                                    var status = Corapprover.Status;
+                                                    var isMyTask = false;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+
+                                                    if (currentUser.Trim() == Corapprover.AssignedTo.Trim() && !status.Trim().ToLower().Equals("completed") && !status.Trim().ToLower().Equals("deferred"))
+                                                    {
+                                                        isMyTask = true;
+                                                        status = "Approve/Reject";
+                                                    }
+                                                    if (!isMyTask)
+                                                    {
+                                                        <td> @status  </td>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <td>  <a href='#' class="btn primary-btn" onclick="LoadApprovalScreen(@Corapprover.WorkFlowId)">@status</a></td>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td> Not Assigned </td>
+                                                }
+
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+
+
+                                                    var startDate = string.Format("{0:MM/dd/yyyy}", Corapprover.DateAssigned);
+                                                    <td>@startDate</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var dateApproved = string.Format("");
+                                                    var status = Corapprover.Status;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+                                                    if (status.Trim().ToLower().Equals("completed") && (outcome.Trim().ToLower().Equals("reject") || outcome.Trim().ToLower().Equals("rejected") || outcome.Trim().ToLower().Equals("approve") || outcome.Trim().ToLower().Equals("approved")))
+                                                    {
+                                                        dateApproved = string.Format("{0:MM/dd/yyyy}", Corapprover.DateApproved);
+                                                    }
+
+                                                    <td>@dateApproved</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                            </tr>
+                                        }
+
+                                        if (!string.IsNullOrEmpty(Corapprover.Corp_Legal_Reviewer))
+                                        {
+                                            <tr>
+                                                <td>Corp_Legal_Reviewer</td>
+                                                <td> @Corapprover.Corp_Legal_Reviewer    </td>
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var currentUser = Model.CurrentUser.Title;
+                                                    var status = Corapprover.Status;
+                                                    var isMyTask = false;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+
+                                                    if (currentUser.Trim() == Corapprover.AssignedTo.Trim() && !status.Trim().ToLower().Equals("completed") && !status.Trim().ToLower().Equals("deferred"))
+                                                    {
+                                                        isMyTask = true;
+                                                        status = "Approve/Reject";
+                                                    }
+                                                    if (!isMyTask)
+                                                    {
+                                                        <td> @status  </td>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <td>  <a href='#' class="btn primary-btn" onclick="LoadApprovalScreen(@Corapprover.WorkFlowId)">@status</a></td>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td> Not Assigned </td>
+                                                }
+
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+
+
+                                                    var startDate = string.Format("{0:MM/dd/yyyy}", Corapprover.DateAssigned);
+                                                    <td>@startDate</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var dateApproved = string.Format("");
+                                                    var status = Corapprover.Status;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+                                                    if (status.Trim().ToLower().Equals("completed") && (outcome.Trim().ToLower().Equals("reject") || outcome.Trim().ToLower().Equals("rejected") || outcome.Trim().ToLower().Equals("approve") || outcome.Trim().ToLower().Equals("approved")))
+                                                    {
+                                                        dateApproved = string.Format("{0:MM/dd/yyyy}", Corapprover.DateApproved);
+                                                    }
+
+                                                    <td>@dateApproved</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                            </tr>
+                                        }
+                                        if (!string.IsNullOrEmpty(Corapprover.Corp_Ops_Leader_Reviewer))
+                                        {
+                                            <tr>
+                                                <td>Corp_Ops_Leader_Reviewer</td>
+                                                <td> @Corapprover.Corp_Ops_Leader_Reviewer    </td>
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var currentUser = Model.CurrentUser.Title;
+                                                    var status = Corapprover.Status;
+                                                    var isMyTask = false;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+
+                                                    if (currentUser.Trim() == Corapprover.AssignedTo.Trim() && !status.Trim().ToLower().Equals("completed") && !status.Trim().ToLower().Equals("deferred"))
+                                                    {
+                                                        isMyTask = true;
+                                                        status = "Approve/Reject";
+                                                    }
+                                                    if (!isMyTask)
+                                                    {
+                                                        <td> @status  </td>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <td>  <a href='#' class="btn primary-btn" onclick="LoadApprovalScreen(@Corapprover.WorkFlowId)">@status</a></td>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td> Not Assigned </td>
+                                                }
+
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+
+
+                                                    var startDate = string.Format("{0:MM/dd/yyyy}", Corapprover.DateAssigned);
+                                                    <td>@startDate</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var dateApproved = string.Format("");
+                                                    var status = Corapprover.Status;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+                                                    if (status.Trim().ToLower().Equals("completed") && (outcome.Trim().ToLower().Equals("reject") || outcome.Trim().ToLower().Equals("rejected") || outcome.Trim().ToLower().Equals("approve") || outcome.Trim().ToLower().Equals("approved")))
+                                                    {
+                                                        dateApproved = string.Format("{0:MM/dd/yyyy}", Corapprover.DateApproved);
+                                                    }
+
+                                                    <td>@dateApproved</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                            </tr>
+                                        }
+
+                                        if (!string.IsNullOrEmpty(Corapprover.Corp_Ops_Leader_2_Reviewer))
+                                        {
+                                            <tr>
+                                                <td>Corp_Ops_Leader_2_Reviewer</td>
+                                                <td> @Corapprover.Corp_Ops_Leader_2_Reviewer    </td>
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var currentUser = Model.CurrentUser.Title;
+                                                    var status = Corapprover.Status;
+                                                    var isMyTask = false;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+
+                                                    if (currentUser.Trim() == Corapprover.AssignedTo.Trim() && !status.Trim().ToLower().Equals("completed") && !status.Trim().ToLower().Equals("deferred"))
+                                                    {
+                                                        isMyTask = true;
+                                                        status = "Approve/Reject";
+                                                    }
+                                                    if (!isMyTask)
+                                                    {
+                                                        <td> @status  </td>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <td>  <a href='#' class="btn primary-btn" onclick="LoadApprovalScreen(@Corapprover.WorkFlowId)">@status</a></td>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td> Not Assigned </td>
+                                                }
+
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+
+
+                                                    var startDate = string.Format("{0:MM/dd/yyyy}", Corapprover.DateAssigned);
+                                                    <td>@startDate</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var dateApproved = string.Format("");
+                                                    var status = Corapprover.Status;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+                                                    if (status.Trim().ToLower().Equals("completed") && (outcome.Trim().ToLower().Equals("reject") || outcome.Trim().ToLower().Equals("rejected") || outcome.Trim().ToLower().Equals("approve") || outcome.Trim().ToLower().Equals("approved")))
+                                                    {
+                                                        dateApproved = string.Format("{0:MM/dd/yyyy}", Corapprover.DateApproved);
+                                                    }
+
+                                                    <td>@dateApproved</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                            </tr>
+                                        }
+
+                                        if (!string.IsNullOrEmpty(Corapprover.Corp_CFO_Reviewer))
+                                        {
+                                            <tr>
+                                                <td>Corp_CFO_Reviewer</td>
+                                                <td> @Corapprover.Corp_CFO_Reviewer    </td>
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var currentUser = Model.CurrentUser.Title;
+                                                    var status = Corapprover.Status;
+                                                    var isMyTask = false;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+
+                                                    if (currentUser.Trim() == Corapprover.AssignedTo.Trim() && !status.Trim().ToLower().Equals("completed") && !status.Trim().ToLower().Equals("deferred"))
+                                                    {
+                                                        isMyTask = true;
+                                                        status = "Approve/Reject";
+                                                    }
+                                                    if (!isMyTask)
+                                                    {
+                                                        <td> @status  </td>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <td>  <a href='#' class="btn primary-btn" onclick="LoadApprovalScreen(@Corapprover.WorkFlowId)">@status</a></td>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td> Not Assigned </td>
+                                                }
+
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+
+
+                                                    var startDate = string.Format("{0:MM/dd/yyyy}", Corapprover.DateAssigned);
+                                                    <td>@startDate</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var dateApproved = string.Format("");
+                                                    var status = Corapprover.Status;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+                                                    if (status.Trim().ToLower().Equals("completed") && (outcome.Trim().ToLower().Equals("reject") || outcome.Trim().ToLower().Equals("rejected") || outcome.Trim().ToLower().Equals("approve") || outcome.Trim().ToLower().Equals("approved")))
+                                                    {
+                                                        dateApproved = string.Format("{0:MM/dd/yyyy}", Corapprover.DateApproved);
+                                                    }
+
+                                                    <td>@dateApproved</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                            </tr>
+                                        }
+
+                                        if (!string.IsNullOrEmpty(Corapprover.Corp_CEO_Reviewer))
+                                        {
+                                            <tr>
+                                                <td>Corp_CEO_Reviewer</td>
+                                                <td> @Corapprover.Corp_CEO_Reviewer    </td>
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var currentUser = Model.CurrentUser.Title;
+                                                    var status = Corapprover.Status;
+                                                    var isMyTask = false;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+
+                                                    if (currentUser.Trim() == Corapprover.AssignedTo.Trim() && !status.Trim().ToLower().Equals("completed") && !status.Trim().ToLower().Equals("deferred"))
+                                                    {
+                                                        isMyTask = true;
+                                                        status = "Approve/Reject";
+                                                    }
+                                                    if (!isMyTask)
+                                                    {
+                                                        <td> @status  </td>
+                                                    }
+                                                    else
+                                                    {
+
+                                                        <td>  <a href='#' class="btn primary-btn" onclick="LoadApprovalScreen(@Corapprover.WorkFlowId)">@status</a></td>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td> Not Assigned </td>
+                                                }
+
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+
+
+                                                    var startDate = string.Format("{0:MM/dd/yyyy}", Corapprover.DateAssigned);
+                                                    <td>@startDate</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                                @if (Corapprover.WorkFlowId > 0)
+                                                {
+                                                    var dateApproved = string.Format("");
+                                                    var status = Corapprover.Status;
+                                                    var outcome = Corapprover.WorkflowOutcome;
+                                                    if (status.Trim().ToLower().Equals("completed") && (outcome.Trim().ToLower().Equals("reject") || outcome.Trim().ToLower().Equals("rejected") || outcome.Trim().ToLower().Equals("approve") || outcome.Trim().ToLower().Equals("approved")))
+                                                    {
+                                                        dateApproved = string.Format("{0:MM/dd/yyyy}", Corapprover.DateApproved);
+                                                    }
+
+                                                    <td>@dateApproved</td>
+                                                }
+                                                else
+                                                {
+                                                    <td> </td>
+                                                }
+                                            </tr>
+                                        }
+
+
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>*@
+
+</div>
+        </div>
+    </div>
+</div>
+
+<div id="approvalModal" class="modal">
+    <div class="modal-content" style="width:38%">
+        <span class="close" id="appClose">×</span>
+        <div id="approval-main-screen"></div>
+    </div>
+</div>
+<style type="text/css">
+    .main-box-wrapper a:visited {
+        color: white !important;
+        text-decoration: none;
+    }
+
+    #approvalstab li > a:visited {
+        color: #009FE3;
+    }
+
+    /* THESE STYLES FOR PRINT POPUP */
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 999; /* Sit on top */
+        padding-top: 10px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var height = $(window).height();
+        $(".inner-container").css("height", height + "px");
+    });
+    function LoadApprovalScreen(workFlowId) {
+        appmodal.style.display = "block";
+
+        $("#approval-main-screen").empty();
+        $("#approval-main-screen").load('/approvals/LoadApprovalScreen', { workFlowId: workFlowId },
+            function (responseTxt, statusTxt, xhr) {
+                var margin = Math.max(0, ($(window).height() - $("#approval-main-screen").height() - 500) / 2);
+                var marginleft = Math.max(0, ($(window).width() - $("#approval-main-screen").width() + 100) / 2);
+                $("#approvalModal").find(".modal-content").css("margin-top", margin);
+                $("#approvalModal").find(".modal-content").css("margin-left", marginleft);
+                //alert(margin);
+            });
+        $("#approval-main-screen").show();
+
+    }
+    var appmodal = document.getElementById('approvalModal');
+    var appspan = document.getElementById("appClose");
+    appspan.onclick = function () {
+        appmodal.style.display = "none";
+        $("#approvalsscreen").hide();
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            appmodal.style.display = "none";
+            $("#approvalsscreen").hide();
+        }
+    }
+    function LoadApprovalData() {
+
+        $("#approvList").empty();
+        $("#approvList").load('/approvals/approvallist', function (responseTxt, statusTxt, xhr) { });
+    }
+</script>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Twitter.Typeahead.MVC.Model</id>
+    <version>1.0.7</version>
+    <title>Typeahead.js for MVC 5 Models</title>
+    <authors>Tim Wilson</authors>
+    <owners>Tim Wilson</owners>
+    <licenseUrl>http://www.gnu.org/licenses/lgpl-3.0.txt</licenseUrl>
+    <projectUrl>http://timdwilson.github.io/typeahead-mvc-model/</projectUrl>
+    <iconUrl>http://twitter.github.io/typeahead.js/img/twitter-logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This package extends upon the Twitter.Typeahead library and the Twitter.Typeahead.MVC library by hooking typeahead to MVC models. With a few configuration tweaks, you'll be connecting typeahead.js to your model in minutes! View a step-by-step tutorial on how to use this package at http://timdwilson.github.io/typeahead-mvc-model. Report issues to https://github.com/timdwilson/typeahead-mvc-model/issues</description>
+    <summary>Extends Twitter's typeahead.js to work with MVC 5 models</summary>
+    <releaseNotes>Removed invalid extra HTML attribute from emitted code from AutocompleteFor ("data_autocomplete_url")</releaseNotes>
+    <copyright>2015</copyright>
+    <tags>twitter typeahead autocomplete mvc mvc5 model</tags>
+    <dependencies>
+      <dependency id="Twitter.Typeahead.MVC" version="1.1.2" />
+      <dependency id="Twitter.Typeahead" version="0.10.5" />
+      <dependency id="WebActivatorEx" version="2.0.6" />
+      <dependency id="Microsoft.AspNet.Mvc" version="5.1.2" />
+      <dependency id="Microsoft.AspNet.Web.Optimization" version="1.1.2" />
+    </dependencies>
+  </metadata>
+</package>

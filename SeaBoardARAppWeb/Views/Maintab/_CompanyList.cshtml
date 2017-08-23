@@ -1,0 +1,16 @@
+﻿@model SB.AR.AppWeb.ViewModels.CompanyMasterViewModel
+<label class="labels" style="width: 20%;">Company<span class="mandatory">*</span></label>
+@Html.DropDownListFor(m => m.CompanyId, new SelectList(Model.CompaniesByDivision, "Value", "Text"),
+                                                             new { @id = "CompanyMaster", @class = "selectpicker select company",
+                                                                   @title = "Select Company",
+                                                                   @data_width = "75%"
+                                                             })
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker();
+        $('.company').attr('disabled', true);
+    });
+  
+</script>

@@ -1,0 +1,563 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9B759935-49C0-4DA3-84A2-CFD71F23AC18}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SB.AR.AppWeb</RootNamespace>
+    <AssemblyName>SB.AR.AppWeb</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode />
+    <TargetOfficeVersion>15.0</TargetOfficeVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ASPNetSpell, Version=4.0.3.24577, Culture=neutral, PublicKeyToken=ed4c1e6166f7ca72, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ExternalDLLs\ASPNetSpell.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper">
+      <HintPath>..\SEABOARD\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip.Reduced">
+      <HintPath>ExternalDLLs\Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ExternalDLLs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Extensions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=69c3241e6f0468ca, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.SharePoint.Client, Version=15.0.0.0">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Client.Taxonomy, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\Common Files\microsoft shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.Taxonomy.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SEABOARD\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SEABOARD\packages\Microsoft.AspNet.Mvc.5.1.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SEABOARD\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SEABOARD\packages\Microsoft.AspNet.Razor.3.1.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SEABOARD\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SEABOARD\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SEABOARD\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\SEABOARD\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <Private>True</Private>
+      <HintPath>..\SEABOARD\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\SEABOARD\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\SEABOARD\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\SEABOARD\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Views\Dashboard\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\TypeaheadBundleConfig.cs" />
+    <Compile Include="Controllers\ApprovalsController.cs" />
+    <Compile Include="Controllers\AttachmentsController.cs" />
+    <Compile Include="Controllers\DashboardController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\DiscussionController.cs" />
+    <Compile Include="Controllers\EntryController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\FinancialsController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HtmlHelpers.cs" />
+    <Compile Include="Controllers\MaintabController.cs" />
+    <Compile Include="Controllers\NarrativeController.cs" />
+    <Compile Include="Controllers\SBControllerBase.cs" />
+    <Compile Include="Controllers\SeaboardController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\ServiceRequestController.cs" />
+    <Compile Include="Filters\SharePointContextFilterAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ApprovalHistory.cs" />
+    <Compile Include="Models\AR.cs" />
+    <Compile Include="Models\ARApprovers.cs" />
+    <Compile Include="Models\ARAttachments.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ARDiscussions.cs" />
+    <Compile Include="Models\ARReportSetWrapper.cs" />
+    <Compile Include="Models\ARType.cs" />
+    <Compile Include="Models\Autocomplete.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\CompanyApprover.cs" />
+    <Compile Include="Models\CorporateApprovers.cs" />
+    <Compile Include="Models\FileDetails.cs" />
+    <Compile Include="Models\Interface\IItemEntity.cs" />
+    <Compile Include="Models\KeyCodes.cs" />
+    <Compile Include="Models\NavigationAR.cs" />
+    <Compile Include="Models\People.cs" />
+    <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\Search.cs" />
+    <Compile Include="Models\ServiceRequest.cs" />
+    <Compile Include="Models\ServiceRequestHistory.cs" />
+    <Compile Include="Models\UserDetails.cs" />
+    <Compile Include="Models\WorkFlow.cs" />
+    <Compile Include="PeopleHelper\JsonHelper.cs" />
+    <Compile Include="PeopleHelper\PeoplePickerHelper.cs" />
+    <Compile Include="PeopleHelper\PeoplePickerUser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\ReportViewerPage.aspx.cs">
+      <DependentUpon>ReportViewerPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportViewerPage.aspx.designer.cs">
+      <DependentUpon>ReportViewerPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SharePointContext.cs" />
+    <Compile Include="TokenHelper.cs" />
+    <Compile Include="Utility\Logging.cs" />
+    <Compile Include="Utility\SBHelper.cs" />
+    <Compile Include="ViewModels\ApprovalViewModel.cs" />
+    <Compile Include="ViewModels\ARButtonViewModel.cs" />
+    <Compile Include="ViewModels\ARDiscussionViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\CompanyMasterViewModel.cs" />
+    <Compile Include="ViewModels\DashboardViewModel.cs" />
+    <Compile Include="ViewModels\ARAttachmentsViewModel.cs" />
+    <Compile Include="ViewModels\ARTypeViewModel.cs" />
+    <Compile Include="ViewModels\ARViewModel.cs" />
+    <Compile Include="ViewModels\DisposalFinancialsViewModel.cs" />
+    <Compile Include="ViewModels\EquityDivestitureFinancialsViewModel.cs" />
+    <Compile Include="ViewModels\EquityInvestmentsFinancialsViewModel.cs" />
+    <Compile Include="ViewModels\ExpenseFinancialsViewModel.cs" />
+    <Compile Include="ViewModels\FinancialsViewModel.cs" />
+    <Compile Include="ViewModels\LeaseFinancialsViewModel.cs" />
+    <Compile Include="ViewModels\LeaseWDFinancialsViewModel.cs" />
+    <Compile Include="ViewModels\LoanAdvancesFinancialsViewModel.cs" />
+    <Compile Include="ViewModels\MaintabViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\NarrativeViewModel.cs" />
+    <Compile Include="ViewModels\NavigationViewModel.cs" />
+    <Compile Include="ViewModels\PurchaseFinancialsViewModel.cs" />
+    <Compile Include="ViewModels\PurchaseWDFinancialsViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\SupplementalFinancialsViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\ASPNetSpellInclude\core\Default.aspx" />
+    <Content Include="Content\ASPNetSpellInclude\core\dialog.js" />
+    <Content Include="Content\ASPNetSpellInclude\debugging-test-scripts\Hello-World.aspx" />
+    <Content Include="Content\ASPNetSpellInclude\debugging-test-scripts\support.txt" />
+    <Content Include="Content\ASPNetSpellInclude\debugging-test-scripts\Test-Server-Ajax.aspx" />
+    <Content Include="Content\ASPNetSpellInclude\dialog.html" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\custom.txt" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\language-rules\banned-words.txt" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\language-rules\common-mistakes.txt" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\language-rules\enforced-corrections.txt" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\README.txt" />
+    <Content Include="Content\ASPNetSpellInclude\include.js" />
+    <Content Include="Content\ASPNetSpellInclude\license.txt" />
+    <Content Include="Content\ASPNetSpellInclude\support.txt" />
+    <Content Include="Content\ASPNetSpellInclude\themes\bright\ajax-loader.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\bright\context-menu.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\bright\dialog-window.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\bright\ieonly.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\buttons\spellicon.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\buttons\spelliconover.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\ajax-loader.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\context-menu.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\dialog-window.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\gwiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\ieonly.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\classic\wiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\ajax-loader.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\context-menu.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\dialog-window.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\gwiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\ieonly.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\clean\wiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\ajax-loader.gif" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\context-menu.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\dialog-window.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\gwiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\ieonly.css" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\wiggle.png" />
+    <Content Include="Content\ASPNetSpellInclude\themes\modern\xp.gif" />
+    <Content Include="Content\ASPNetSpellInclude\translations\af.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ar.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\be.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\bg.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ca.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\cn.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\cs.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\cy.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\da.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\de.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\el.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\en.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\es.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\et.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\fa.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\fi.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\fr.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ga.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\gl.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\hi.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\hr.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\hu.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\id.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\is.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\it.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\iw.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ja.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ko.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\lt.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\lv.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\mk.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ms.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\mt.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\nl.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\no.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\pl.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\pt.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ro.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\ru.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\simple.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\sk.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\sl.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\sq.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\sr.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\sw.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\template.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\th.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\tl.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\tr.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\tw.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\uk.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\vi.js" />
+    <Content Include="Content\ASPNetSpellInclude\translations\yi.js" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\Images\ajax-loader.gif" />
+    <Content Include="Content\Images\sort_asc.png" />
+    <Content Include="Content\Images\sort_asc_disabled.png" />
+    <Content Include="Content\Images\sort_both.png" />
+    <Content Include="Content\Images\sort_desc.png" />
+    <Content Include="Content\Images\sort_desc_disabled.png" />
+    <Content Include="Content\Images\spcommon.png" />
+    <Content Include="Content\Image\delete.png" />
+    <Content Include="Content\Image\favicon.png" />
+    <Content Include="Content\Image\logo.png" />
+    <Content Include="Content\Image\logo1.png" />
+    <Content Include="Content\Image\print-icon.png" />
+    <Content Include="Content\Image\sort_asc.png" />
+    <Content Include="Content\Image\sort_asc_disabled.png" />
+    <Content Include="Content\Image\sort_both.png" />
+    <Content Include="Content\Image\sort_desc.png" />
+    <Content Include="Content\Image\sort_desc_disabled.png" />
+    <Content Include="Content\Image\spcommon.png" />
+    <Content Include="Content\peoplepickercontrol.css" />
+    <Content Include="Content\Seaboard\base.css" />
+    <Content Include="Content\Seaboard\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\Seaboard\bootstrap-glyphicons.css" />
+    <Content Include="Content\Seaboard\bootstrap-select.min.css" />
+    <Content Include="Content\Seaboard\bootstrap.css" />
+    <Content Include="Content\Seaboard\jquery.dataTables.min.css" />
+    <Content Include="Content\Seaboard\jquery.jgrowl.min.css" />
+    <Content Include="Content\Seaboard\jquery.jgrowl.min.js" />
+    <Content Include="Content\Seaboard\owl.carousel.css" />
+    <Content Include="Content\Seaboard\owl.transitions.css" />
+    <Content Include="Content\Seaboard\responsive.css" />
+    <Content Include="Content\Seaboard\responsive.dataTables.min.css" />
+    <Content Include="Content\Seaboard\style.css" />
+    <Content Include="Content\typeahead.css" />
+    <Content Include="ExternalDLLs\ASPNetSpell.dll" />
+    <Content Include="ExternalDLLs\Ionic.Zip.Reduced.dll" />
+    <Content Include="ExternalDLLs\log4net.dll" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\Seaboard\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Reports\ReportViewerPage.aspx" />
+    <Content Include="Scripts\additional-methods.min.js" />
+    <Content Include="Scripts\app.js" />
+    <Content Include="Scripts\bloodhound.js" />
+    <Content Include="Scripts\bloodhound.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\ASPNetSpellInclude\core\default.ashx" />
+    <Content Include="Content\ASPNetSpellInclude\debugging-test-scripts\Test-Instalation.ashx" />
+    <Content Include="Content\ASPNetSpellInclude\dictionaries\English %28International%29.dic" />
+    <Content Include="Content\ASPNetSpellInclude\web.config" />
+    <Content Include="fonts\Seaboard\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\Seaboard\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\Seaboard\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\Seaboard\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Error.html" />
+    <None Include="Properties\PublishProfiles\SEABOARD.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\camljs.js" />
+    <Content Include="Scripts\dataTables.responsive.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1\package.json" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1\AUTHORS.txt" />
+    <Content Include="Scripts\jquery-ui-1.12.1\external\jquery\jquery.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1\images\ui-icons_444444_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.12.1\images\ui-icons_555555_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.12.1\images\ui-icons_777620_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.12.1\images\ui-icons_777777_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.12.1\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.12.1\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Scripts\jquery-ui-1.12.1\index.html" />
+    <Content Include="Scripts\jquery-ui-1.12.1\jquery-ui.css" />
+    <Content Include="Scripts\jquery-ui-1.12.1\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1\jquery-ui.min.css" />
+    <Content Include="Scripts\jquery-ui-1.12.1\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1\jquery-ui.structure.css" />
+    <Content Include="Scripts\jquery-ui-1.12.1\jquery-ui.structure.min.css" />
+    <Content Include="Scripts\jquery-ui-1.12.1\jquery-ui.theme.css" />
+    <Content Include="Scripts\jquery-ui-1.12.1\jquery-ui.theme.min.css" />
+    <Content Include="Scripts\jquery-ui-1.12.1\LICENSE.txt" />
+    <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\peoplepickercontrol.js" />
+    <Content Include="Scripts\peoplepickercontrol_resources.en.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Seaboard\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\Seaboard\bootstrap-select.min.js" />
+    <Content Include="Scripts\Seaboard\bootstrap.js" />
+    <Content Include="Scripts\Seaboard\CurrencyFormatter.js" />
+    <Content Include="Scripts\Seaboard\html5shiv.js" />
+    <Content Include="Scripts\Seaboard\moment-with-locales.js" />
+    <Content Include="Scripts\Seaboard\owl.carousel.js" />
+    <Content Include="Scripts\spcontext.js" />
+    <Content Include="Scripts\typeahead.bundle.js" />
+    <Content Include="Scripts\typeahead.bundle.min.js" />
+    <Content Include="Scripts\typeahead.jquery.js" />
+    <Content Include="Scripts\typeahead.jquery.min.js" />
+    <Content Include="Scripts\typeahead.mvc.model.js" />
+    <Content Include="Scripts\typings\camljs\camljs.d.ts" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Uploads\ServiceRequestDocuments\test.txt" />
+    <Content Include="Uploads\test.txt" />
+    <Content Include="Views\Financials\_SupplementalFinancials.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Maintab\_CompanyList.cshtml" />
+    <Content Include="Views\Shared\_ApprovalScreen.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Approvals\_Approvals.cshtml" />
+    <Content Include="Views\Attachments\_Attachments.cshtml" />
+    <Content Include="Views\Discussion\_Discussion.cshtml" />
+    <Content Include="Views\Financials\_Financials.cshtml" />
+    <Content Include="Views\Maintab\_Maintab.cshtml" />
+    <Content Include="Views\Narrative\_Narrative.cshtml" />
+    <Content Include="Views\Seaboard\MainView.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Buttons.cshtml" />
+    <Content Include="Views\Seaboard\Index.cshtml" />
+    <Content Include="Views\Entry\Index.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Financials\_DisposalFinancials.cshtml" />
+    <Content Include="Views\Financials\_EquityDivestitureFinancials.cshtml" />
+    <Content Include="Views\Financials\_EquityInvestmentsFinancials.cshtml" />
+    <Content Include="Views\Financials\_ExpenseFinancials.cshtml" />
+    <Content Include="Views\Financials\_LeaseFinancials.cshtml" />
+    <Content Include="Views\Financials\_LeaseWDFinancials.cshtml" />
+    <Content Include="Views\Financials\_LoanAdvancesFinancials.cshtml" />
+    <Content Include="Views\Financials\_PurchaseFinancials.cshtml" />
+    <Content Include="Views\Financials\_PurchaseWDFinancials.cshtml" />
+    <Content Include="Views\Shared\_Scripts.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Currency.cshtml" />
+    <Content Include="Views\Shared\_ApprovalList.cshtml" />
+    <Content Include="Views\Shared\_Navigation.cshtml" />
+    <Content Include="Views\Search\ViewAllAR.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NSBD.SharepointAutoMapper\NSBD.SharepointAutoMapper.csproj">
+      <Project>{3d9260d9-a7a8-48ce-ba71-079141a529b6}</Project>
+      <Name>NSBD.SharepointAutoMapper</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\ARAttachmentReport.rdlc" />
+    <EmbeddedResource Include="Reports\ARDiscussionReport.rdlc" />
+    <EmbeddedResource Include="Reports\ARMainReport.rdlc" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>53000</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:53000/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

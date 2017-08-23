@@ -1,0 +1,264 @@
+﻿@model SB.AR.AppWeb.ViewModels.SearchViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #Visited a:visited {
+        color: white !important;
+    }
+
+    .container {
+        width: 970px !important;
+    }
+
+    chromeControl_bottomheader {
+        padding-left: 10px !important;
+    }
+
+    .ms-core-listMenu-verticalBox > .ms-core-listMenu-item, .ms-core-listMenu-verticalBox li.static > .ms-core-listMenu-item {
+        padding: 5px 0px !important;
+    }
+
+    #sideNavBox {
+        padding-left: 5px !important;
+    }
+
+    .dropdown-toggle {
+        text-transform: none !important;
+    }
+</style>
+
+<form id="frmSearch" method="post" action="/search/gosearch" enctype="application/x-www-form-urlencoded">
+    <div class="main-heading-wrapper">
+        <h2>Search</h2>
+    </div>
+    <div class="main-box-wrapper">
+        <script src="~/Scripts/typeahead.bundle.min.js" type="text/javascript"></script>
+        <script src="~/Scripts/typeahead.jquery.min.js" type="text/javascript"></script>
+        <script src="~/Scripts/typeahead.mvc.model.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            function FillCompany()
+            {
+                var Id = $('#arDivision').val();
+                $("#company").empty();
+                $("#company").load('/Search/FillCompany', { divisionId: Id }, function (responseTxt, statusTxt, xhr) { setupSearchScreen(); });
+            }
+        </script>
+        <div class="right-panel">
+            <input type="hidden" id="pNq" value="@HttpContext.Current.Request.Url.Query" />
+            <div id="searchResultScreen" class="search-window-area" style="display:none;">
+                <div class="">
+                    <a id="btnBackToSearch" class="btn secondary-btn" href="#">Back to Search</a>
+                </div>
+                <iframe id="searchFrame" style="min-height:600px;width:100%;" frameborder="0" scrolling="no">
+                    Your browser does not support iframes
+                </iframe>
+            </div>
+            <div id="searchMainScreen" class="search-window-area">
+                <ul>
+
+                    <li>
+                        <label>Keyword</label>
+                        <div>
+                            @Html.TextBoxFor(m => m.KeywordString, new { @placeholder = "Type here..." })
+                        </div>
+                    </li>
+                    <li>
+                        <div class="two-search-blocks">
+                            <ul class="row">
+                                <li class="col-sm-6">
+                                    <label class="labels">Division</label>
+
+                                    <div class="dcc-list">
+
+                                        @Html.DropDownListFor(m => m.DivisionId, new SelectList(Model.Division, "Value", "Text"),
+                                                             new { @id = "arDivision", @class = "selectpicker select", @data_width = "100%", @title = "Select Division", @onchange = "FillCompany()" })
+
+
+                                    </div>
+                                    @Html.HiddenFor(m => m.DivisionString)
+                                </li>
+                                <li class="col-sm-6">
+                                    <div class="dcc-list" id="company" >
+                                        @*<label class="labels">Company</label>*@
+                                        @Html.Partial("~/Views/Maintab/_CompanyList.cshtml", new SB.AR.AppWeb.ViewModels.CompanyMasterViewModel(Model.SharePointContext) { CompanyId = (int)Model.CompanyId, DivisionId = (int)Model.DivisionId })
+                                    </div>
+                                    @Html.HiddenFor(m => m.CompanyString)
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="two-search-blocks">
+                            <ul class="row">
+                                <li class="col-sm-6">
+                                    <label class="labels">Status</label>
+
+                                    @Html.DropDownListFor(m => m.Status, new SelectList(Model.StatusChoices, "Text", "Text"),
+                                           new { @id = "statustype", @class = "selectpicker select", @data_width = "100%", @title = "Select Status", })
+                                </li>
+                                <li class="col-sm-6">
+                                    <label>Project Manager</label>
+                                    @Html.TextBoxFor(m => m.PMOwner)
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="two-search-blocks">
+                            <ul class="row">
+                                <li class="col-sm-6">
+                                    <label>Created By</label>
+                                    @Html.TextBoxFor(m => m.CreatedBy)
+                                </li>
+                                <li class="col-sm-6">
+                                    <div class="dcc-list">
+                                        <label class="labels">Category</label>
+                                        @Html.DropDownListFor(m => m.CategoryString, new SelectList(Model.Categories, "Text", "Text"),
+                                  new { @id = "artype", @class = " selectpicker select", @data_width = "100%", @title = "Select Category" })
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Amount Between</label>
+                    </li>
+                    <li>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                @Html.TextBoxFor(m => m.AmountFrom, new { @placeholder = "$" })
+                            </div>
+                            <div class="col-sm-3">
+                                @Html.TextBoxFor(m => m.AmountTo, new { @placeholder = "$" })
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Submitted Date Range</label>
+                        <ul class="row">
+                            <li class="col-sm-3">
+                                <div class='input-group date datetimepicker' id=''>
+                                    @Html.EditorFor(m => m.SubmittedFrom, new { placeholder = "MM-DD-YYYY", @class = "form-control forms br-none" })
+                                    <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                            </li>
+                            <li class="col-sm-3">
+                                <div class='input-group date datetimepicker' id=''>
+                                    @Html.EditorFor(m => m.SubmittedTo, new { placeholder = "MM-DD-YYYY", @class = "form-control forms br-none" })
+                                    <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                            </li>
+                            <li class="col-sm-6"></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="two-button-wrapper">
+                    <a class="btn primary-btn" href="#" style="display:none;">Cancel</a>
+                    <a id="btnSearch" class="btn secondary-btn" href="#">Search</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="~/Scripts/Seaboard/bootstrap.js"></script>
+
+<script type="text/javascript" src="~/Scripts/Seaboard/html5shiv.js"></script>
+<script type="text/javascript" src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Seaboard/moment-with-locales.js"></script>
+<script type="text/javascript" src="~/Scripts/Seaboard/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Seaboard/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+         $('.datetimepicker').datetimepicker({ format: 'MM-DD-YYYY' });
+
+        $('#btnSearch').click(function () { performSearch(); });
+        $('#btnBackToSearch').click(function () {
+            $('#searchResultScreen').hide();
+            $('#searchMainScreen').show();
+            loadSearchResultScreen('');
+        });
+
+        setupSearchScreen();
+    });
+
+    function setupSearchScreen()
+    {        
+        $('span.mandatory:Contains("*")').css('display', 'none');
+    }
+
+    function performSearch() {
+
+        // fill company dropdown text value for use in search model as this one does not require id
+        if ($('#company option:selected').text() != 'Select Company')
+        {
+            $('#CompanyString').val($('#company option:selected').text());
+        }
+
+        if ($('#arDivision option:selected').text() != 'Select Division')
+        {
+            $('#DivisionString').val($('#arDivision option:selected').text());
+        }
+
+        var jqxhr = $.post("/search/gosearch", $('#frmSearch').serialize())
+            .success(function (searchUrl) {
+
+                if (searchUrl != '') {
+
+                    
+                    $('#searchMainScreen').hide();
+                    loadSearchResultScreen(searchUrl);
+                    $('#searchResultScreen').show();
+                }
+            })
+            .error(function (xhr, status, error) {
+
+            });
+    }
+
+    function loadSearchResultScreen(url) {
+
+        var reportFrame = document.getElementById('searchFrame');
+        if (reportFrame != null) {
+            if (reportFrame.src) {
+                reportFrame.src = url;
+            }
+            else if (reportFrame.contentWindow !== null && reportFrame.contentWindow.location !== null) {
+                reportFrame.contentWindow.location = url;
+            }
+            else {
+                reportFrame.setAttribute("src", url);
+            }
+        }
+    }
+
+    function listener(event) {
+        
+        //console.log('open AR in edit ' + event.data);
+        //window.location.href.substr(0, window.location.href.indexOf('Search'));
+        var u1 = "/Seaboard/MainView" + $('#pNq').val() + "&id=" + event.data + "&tab=maintab";
+        window.location = u1;
+
+    }
+
+    if (window.addEventListener) {
+        try {
+            addEventListener("message", listener, false);
+        }
+        catch (rr)
+        { }
+
+    }
+    else {
+        try {
+            attachEvent("onmessage", listener);
+        }
+        catch (rr)
+        { }
+
+    }
+
+</script>

@@ -1,0 +1,162 @@
+﻿@model SB.AR.AppWeb.ViewModels.FinancialsViewModel
+
+
+
+<style type="text/css" >
+
+    /*input:not([type='radio']):not([type='checkbox']) {
+        width: 53%;
+    }*/
+    /*.dcc-list {
+        width: 73%;
+    }*/
+    input:not([type='radio']):not([type='checkbox']) {
+        width: 53%;
+    }
+
+    .main-box-wrapper2 label {
+        width: auto !important;
+    }
+
+    /*.main-box-wrapper label {
+        width: 320px;
+    }*/
+
+    .CheckBoxLable {
+        width: 150px !important;
+        padding: 0px !important;
+    }
+
+    .label90 {
+        width: 90% !important;
+    }
+
+    .LabelFulll {
+        width: 100% !important;
+    }
+
+    .left5 {
+        margin-left: 5px;
+    }
+
+    .relativePos {
+        position: relative;
+    }
+
+
+    .checkbox input[type='checkbox'], .checkbox-inline input[type='checkbox'] {
+        position: relative;
+        margin: 0px;
+        margin-top: -3px;
+    }
+</style>
+
+
+<div id="financialstab" class="tab-pane fade in active">
+
+   
+    @{
+        var totalCost = String.Format("{0:C}", Model.AR.Total_Cost);
+    }
+
+   
+    <input type="hidden" name="CrntTab" id="CrntTab" value="/financials/savear">
+    <ul class="row created-wrapper narrative-top-area main-box-wrapper2">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <li class="col-sm-12">
+            <label>AR Title:</label>
+            <span style="font-weight: bold !important; color: #009FE3;">@Model.Title</span>
+
+        </li>
+        <li class="col-sm-4">
+            <label>AR ID:</label>
+            <span>@Model.AR.AR_ID</span>
+        </li>
+        <li class="col-sm-4">
+            <label>AR Type:</label>
+            <span>@Model.AR_Type</span>
+        </li>
+        <li class="col-sm-4">
+            <label>Current Status:</label>
+            <span>@Model.AR.Current_Status</span>
+        </li>
+
+        <li class="col-sm-4">
+            <label><b>Total Cost:</b></label>
+            <label><b>@totalCost</b></label>
+        </li>
+        <li class="col-sm-4">
+            <label>Division:</label>
+            @{ if (Model.AR.Division != null)
+             {<span>@Model.AR.Division.Value</span>}
+             else
+             {<span>&nbsp;</span>}
+            }
+
+        </li>
+        <li class="col-sm-4">
+            <label>Company:</label>
+            @{ if (Model.AR.Division != null)
+             { <span>@Model.AR.Company_Name.Value</span>}
+             else
+             {<span>&nbsp;</span>}
+
+            }
+        </li>
+    </ul>
+    <div class="row" id="finance-tab-partial-container">
+    </div>
+    <div id="btngrpDiv"></div>
+</div>
+  <!--[if IE]><!-->
+
+
+<!--<![endif]-->
+
+<script type="text/javascript">
+   
+    $(document).ready(function () {
+        $("select").each(function () {
+            $(this).css("width","52%");
+        });
+        var height = $(window).height();
+        $(".inner-container").css("height", height + 300 + "px");
+        var arType = $('#arTypeHiddenValue').val();
+        var path = "/Financials/LoadFinancialPartial";
+        LoadFinancialPartial(path, arType);
+        LoadBtnPartial('/home/buttons');
+    });
+    function LoadBtnPartial(path) {
+        $("#btngrpDiv").load(path, { currenttab: "finance", idPrev: "narrative", idNext: "attachments", controller: '/financials/savear' }, function (responseTxt, statusTxt, xhr) {
+            if (statusTxt == "success") {
+            }
+            else if (statusTxt == "error")
+                alert("Error: " + xhr.status + ": " + xhr.statusText);
+        });
+    }
+    function LoadFinancialPartial(path, tabIndex) {
+        $(".loader").show();
+        $("#finance-tab-partial-container").load(path, { id: tabIndex }, function (responseTxt, statusTxt, xhr) {
+            if (statusTxt == "success") {
+                $(".loader").hide();
+                var owl = $(".dashboard-table");
+                owl.owlCarousel({
+                    navigation: true,
+                    singleItem: true,
+                    transitionStyle: "fadeUp",
+                });
+                $("#transitionType").change(function () {
+                    var newValue = $(this).val();
+                    owl.data("owlCarousel").transitionTypes(newValue);
+                    owl.trigger("owl.next");
+                });
+            }
+            else if (statusTxt == "error")
+                alert("Error: " + xhr.status + ": " + xhr.statusText);
+
+            $(".loader").hide();
+        });
+    }
+
+   
+</script>

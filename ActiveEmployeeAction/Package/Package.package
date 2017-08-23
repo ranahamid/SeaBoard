@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="cbec2746-bef4-4750-96dc-91aab33ab54f" solutionId="cbec2746-bef4-4750-96dc-91aab33ab54f" resetWebServer="false" sharePointProductVersion="15.0" name="ActiveEmployeeAction" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="6bafa1e0-6617-49f7-95b7-02fc31753689" />
+  </features>
+  <projectItems>
+    <projectItemReference itemId="04273568-8813-4c78-bf6b-452e11c7b7a3" />
+  </projectItems>
+</package>

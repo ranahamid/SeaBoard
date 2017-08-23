@@ -1,0 +1,120 @@
+﻿@model SB.AR.AppWeb.ViewModels.LoanAdvancesFinancialsViewModel
+<form id="arfrm" method="post" action="/financials/savear" enctype="application/x-www-form-urlencoded">
+    <ul class="row narrative-bottom-area">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <li class="col-sm-6 financial-top-area">
+            <div class="vertical-middle">
+                <label>State Interest Rate (%)</label>
+                @Html.EditorFor(model => model.Stated_Interest_Rate, new { htmlAttributes = new { @type = "text", @min = "0" } })
+                <input type="hidden" name="id" value="@Model.AR.ID">
+                <input type="hidden" name="IsFinanceTab" value="true">
+            </div>
+            
+
+
+            <div class="vertical-middle dcc-list">
+                <div class="width">
+                    <label class="">Maturity Date</label>
+                </div>
+                <div class='IE input-group date datetimepicker width ' style="width: 54%;">
+                    @Html.TextBoxFor(m => m.Maturity_Date, new { @class = "left5 LabelFulll form-control forms br-none", @placeholder = "MM-DD-YYYY" })
+                    <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+                <div class='nonIE input-group date datetimepicker width ' id='' style=" width: 53%; margin-left: -15px;">
+                    @Html.TextBoxFor(m => m.Maturity_Date, new { @class = "left5 LabelFulll form-control forms br-none", @placeholder = "MM-DD-YYYY" })
+                    <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <div class="vertical-middle">
+                <label>Lender<span class="mandatory">*</span></label>
+                @Html.EditorFor(m => m.Lender, new { placeholder = "First National Mortgag" })
+            </div>
+            
+            <div class="vertical-middle dcc-list">
+                <div class="width">
+                    <label class="">Lend Date</label>
+                </div>
+                <div class='IE input-group date datetimepicker width ' style="width: 54%;">
+                    @Html.TextBoxFor(m => m.Lend_Date, new { @class = "left5 LabelFulll form-control forms br-none", @placeholder = "MM-DD-YYYY" })
+                    <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+                <div class='nonIE input-group date datetimepicker width ' id='' style=" width: 53%; margin-left: -15px;">
+                    @Html.TextBoxFor(m => m.Lend_Date, new { @class = "left5 LabelFulll form-control forms br-none", @placeholder = "MM-DD-YYYY" })
+                    <span class="input-group-addon input-adss"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <div class="vertical-middle">
+                <label>Borrower<span class="mandatory">*</span></label>
+                @Html.EditorFor(m => m.Borrower, new { placeholder = "Borrower" })
+            </div>
+            <div class="vertical-middle">
+                <label>Currency Name</label>
+                @Html.EditorFor(m => m.Currency_Name, new { placeholder = "USD" })
+            </div>
+            <div class="vertical-middle">
+                <label>Principal Amount<span class="mandatory">*</span></label>
+                @Html.EditorFor(model => model.Principal_Amount, new { htmlAttributes = new { @type = "text", @class = "number"} })
+            </div>
+        </li>
+        <li class="col-sm-12 total-cost-highlight">
+            <div class="row">
+                <div class="col-sm-6 financial-top-area">
+                    <div class="vertical-middle total-cost-wrapper">
+                        <label><b>Total Cost</b></label>
+                        @Html.EditorFor(m => m.Total_Cost, new { htmlAttributes = new { @class = "greyBold number", @required = "required", @type = "text", @min = "0" } })
+                    </div>
+                    <div class="vertical-middle">
+                        <label>Budget Amount</label>
+                        @Html.EditorFor(m => m.Budget_Amount, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "0" } })
+                    </div>
+                </div>
+                <div class="col-sm-6 financial-top-area">
+                    <div class="budget-line-item">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div>
+                                    <label class="LabelFulll">Budget Line Item #</label>
+                                    @Html.EditorFor(m => m.BudgetLineItem, new { htmlAttributes = new { @type = "text", @class = "LabelFulll" } })
+                                </div>
+                            </div>
+                            <div class="col-sm-6 budget-checkbox">
+                                <div class="checkbox">
+                                    <label for="In_Budget" class="CheckBoxLable css-label">In Budget</label>
+                                    @Html.CheckBoxFor(m => m.In_Budget, new { })
+                                </div>
+                                <div class="checkbox">
+                                    <label for="Funds_Committed" class="CheckBoxLable css-label">Funds Commited</label>
+                                    @Html.CheckBoxFor(m => m.Funds_Committed, new { })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <script src="~/Scripts/Seaboard/CurrencyFormatter.js"></script>
+    <script type="text/javascript">
+       
+        $(document).ready(function () {
+            var height = $(window).height();
+            $(".inner-container").css("height", height + 470 + "px");
+            $('.datetimepicker').datetimepicker({ format: 'MM-DD-YYYY' });
+            $('.selectpicker').selectpicker();
+            totalCostCalculate();
+            function totalCostCalculate() {
+                var princAmt = $("#Principal_Amount").val();
+                princAmt = princAmt.replace("$", "");
+                if (princAmt == "")
+                    princAmt = "0";
+                // remove the commas from the field. The field type is currency - string.replace(/[\,]/g, '')
+                var total = parseFloat(princAmt.replace(/[\,]/g, ''));
+                SetTotalCost(total);
+            }
+            $("#Principal_Amount").blur(function () {
+
+                totalCostCalculate();
+            });
+        });
+    </script>
+</form>

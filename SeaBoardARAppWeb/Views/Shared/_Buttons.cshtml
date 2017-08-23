@@ -1,0 +1,193 @@
+﻿@model SB.AR.AppWeb.ViewModels.ARButtonViewModel
+@{
+    var controller = string.Empty;
+    var path = string.Empty;
+    var hostweburl = string.Empty;
+    if (ViewBag.Controller != null && ViewBag.Controller.ToString().Contains("/"))
+    {
+        var fullpath = ViewBag.Controller.ToString().Split('/');
+        if (fullpath.Length == 3)
+        {
+            controller = fullpath[1];
+            path = fullpath[2];
+        }
+    }
+
+    if (Model.AR != null && (Model.IsEditable || !Model.AR.IsApproved))
+    {
+        <div class="two-button-wrapper text-center pagination-btn" id="Visited">
+            <a style="margin-top:15px" class="btn primary-btn" href="#@ViewBag.PrevTab" onclick="ActiveTab('@ViewBag.PrevTab')"><i class="fa fa-angle-left" aria-hidden="true"></i>Back</a>
+            <a style="margin-top:15px" class="btn primary-btn" onclick="ConfirmCancel()">Cancel</a>
+            <span id="allTT">
+                <a style="margin-top:15px" class="btn primary-btn" href="#" onclick="SaveAR('@ViewBag.NextTab', '@controller', 'SaveARAsDraft')">Save Draft</a>
+                <a style="margin-top:15px" class="btn primary-btn" href="#" onclick="SaveAR('@ViewBag.NextTab', '@controller', 'SaveARAsSubmitRMReview')">Send for Review</a>
+            </span>
+            <span id="attactmentTT" style="display:none;">
+                <a style="margin-top:15px" class="btn primary-btn" href="#" onclick="SaveARAsDraft()">Save Draft</a>
+                <a style="margin-top:15px" class="btn primary-btn" href="#" onclick="SaveARAsSubmitRMReview()">Send for Review</a>
+            </span>
+            <a style="display: none;margin-top:15px" class="btn primary-btn submitmian" id="btnSubmitValidate" href="#" onclick="SubmitAR()">Submit for Approval</a>
+            <input type="submit" id="btnSubmit" style="display:none;">
+            @{
+        if (!((@ViewBag.NextTab == "discussion") && (@ViewBag.PrevTab == "financials")))
+        {
+            <a style="margin-top:15px" class="btn primary-btn" href="#@ViewBag.NextTab" onclick="SaveAR('@ViewBag.NextTab', '@controller', '@path')">Next<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+        }
+            }
+
+        </div>
+    }
+}
+<style type="text/css">
+    #Visited a:visited {
+        color: white !important;
+    }
+
+    .btn {
+        padding: 20px 30px;
+    }
+
+
+    chromeControl_bottomheader {
+        padding-left: 10px !important;
+    }
+
+    .ms-core-listMenu-verticalBox > .ms-core-listMenu-item, .ms-core-listMenu-verticalBox li.static > .ms-core-listMenu-item {
+        padding: 5px 0px !important;
+    }
+
+    #sideNavBox {
+        padding-left: 5px !important;
+    }
+
+
+
+    .dropdown-toggle {
+        text-transform: none !important;
+    }
+
+    .greyBold {
+        font-weight: bold !important;
+        background-color: #eee !important;
+    }
+</style>
+<script type="text/javascript">
+    function SetError() {
+        $(".error").each(function (i, v) {
+            $(this).remove();
+            $(this).removeClass("inputTxtError");
+        });
+        $('input[required],select[required], textarea[required]').each(function (i, v) {
+            var value = $(this).val();
+            if (value == '' && value != "0") {
+                var name = $(this).attr("name");
+                var msg = '<label class="error" for="' + $(this).attr("name") + '">This field is required.</label>';
+                if (!$(this).hasClass("bs-select-hidden")) {
+                    $(this).addClass('inputTxtError').after(msg);
+                }
+                else {
+                    $(".bootstrap-select").addClass('inputTxtError').after(msg);
+                }
+                if (i == 0)
+                    $('input[name="' + name + '"]').focus();
+            }
+        });
+    }
+    function ConfirmCancel() {
+        $.blockUI({
+            message: $('#Confirmation'), css: { width: '500px' }
+        });
+        var hostweburl = decodeURIComponent(getQueryStringParameter("SPHostUrl"));
+        $('#yes').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/Home/CancelAR',
+                data: {},
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+
+                    window.location.href = '/Home/Index?SPHostUrl=' + hostweburl;
+                    $.unblockUI();
+                },
+                complete: function () {
+                    // unblock when remote call returns
+                    $.unblockUI();
+                },
+                error: function () {
+                    $.unblockUI();
+                }
+            });
+        });
+        $('#no').click(function () {
+            $.unblockUI();
+            return false;
+        });
+
+    }
+    function ActiveTab(activeId) {
+        $(document).ready(function () {
+            if (activeId == "entry") {
+                $(".tab-wrapper").hide();
+                $(".entry-form-wrapper").show();
+            }
+            else {
+
+                $('.nav-tabs a[href="#' + activeId + '"]').trigger('click');
+            }
+        });
+    }
+    $(function () {
+       
+        if ('@Model.AR.IsApproved' == 'True' && '@Model.IsEditable' == 'False') {
+            try {
+                $("#maintab input, #financialstab input, #narrativetab input").each(function () {
+                    $(this).attr('readonly', true);
+                });
+                $("#maintab textarea, #financialstab textarea, #narrativetab textarea").each(function () {
+                    $(this).attr('readonly', true);
+                });
+                $("#maintab select, #financialstab select, #narrativetab select").each(function () {
+                    $(this).attr('disabled', true);
+                });
+
+                $("#maintab input[type=checkbox], #financialstab input[type=checkbox], #narrativetab input[type=checkbox]").each(function () {
+                    $(this).attr("onclick", "return false;");
+                });
+
+            } catch (err) { }
+        }
+        $("#Total_Cost").attr('readonly', true);
+        if ($("#liattachmentstab").hasClass("active")) {
+            $(".submitmian").show();
+            $("#attactmentTT").show();
+            $("#allTT").hide();
+        }
+        else {
+            $("#allTT").show();
+            $("#attactmentTT").hide();
+        }
+        $('.datetimepicker').datetimepicker({ format: 'MM-DD-YYYY' });
+        $('select').selectpicker();
+        $('input[type=number]').on("keydown", function (event) {
+            if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+                (event.keyCode == 65 && event.ctrlKey === true) ||
+                (event.keyCode == 188 || event.keyCode == 190 || event.keyCode == 110) ||
+                (event.keyCode >= 35 && event.keyCode <= 39)) {
+                return;
+            }
+            else {
+                if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+                    event.preventDefault();
+                }
+            }
+        });
+        $("input, select, textarea").blur(function () {
+            var value = $(this).val();
+            if (value != '') {
+                $(this).next(".error").remove();
+                $(this).removeClass("inputTxtError");
+            }
+        });
+    });
+</script>

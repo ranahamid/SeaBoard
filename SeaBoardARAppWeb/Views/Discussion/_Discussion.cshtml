@@ -1,0 +1,191 @@
+﻿@model SB.AR.AppWeb.ViewModels.ARDiscussionViewModel
+<style>
+    .main-box-wrapper label {
+        width: auto !important;
+    }
+</style>
+<div id="discussiontab" class="tab-pane fade in active ">
+    @{
+        var totalCost = String.Format("{0:C}", Model.AR.Total_Cost);
+    }
+
+    <ul class="row created-wrapper narrative-top-area">
+        <li class="col-sm-12">
+            <label>AR Title:</label>
+            @*<div>
+                <a href="#">@Model.AR.Title</a>
+            </div>*@
+            <span style="font-weight: bold !important; color: #009FE3;">@Model.AR.Title</span>
+        </li>
+        <li class="col-sm-4">
+            <label>AR ID:</label>
+            <span>@Model.AR.AR_ID</span>
+        </li>
+        <li class="col-sm-4">
+            <label>AR Type:</label>
+            <span>@Model.AR.AR_Type</span>
+        </li>
+        <li class="col-sm-4">
+            <label>Current Status:</label>
+            <span>@Model.AR.Current_Status</span>
+        </li>
+        <li class="col-sm-4">
+            <label><b>Total Cost:</b></label>
+            <span>@totalCost</span>
+        </li>
+
+        <li class="col-sm-4">
+            <label>Division:</label>
+            @{ if (Model.AR.Division != null)
+             {<span>@Model.AR.Division.Value</span>}
+             else
+             {<span>&nbsp;</span>}
+            }
+        </li>
+        <li class="col-sm-4">
+            <label>Company:</label>
+            @{ if (Model.AR.Company_Name != null)
+             {
+            <span>@Model.AR.Company_Name.Value</span>}
+             else
+             {
+            <span>&nbsp;</span>}
+
+            }
+        </li>
+    </ul>
+    
+
+   <div class=" discussion-wrapper" width:100%;">
+        <div class="col-sm-12">
+            <div class="dicussion-textarea">
+                <div class="row">
+                    <div class="col-lg-11">
+                        <textarea required id="txtMessage" name="txtMessage" style="min-height:170px;"></textarea>
+                    </div>
+                    <div class="col-lg-1" style="padding-top: 140px; padding-left: 0px; width: 5.5%;">
+
+                        @{
+                            ASPNetSpell.Razor.SpellButton btnSpellButton2 = new ASPNetSpell.Razor.SpellButton();
+                            btnSpellButton2.InstallationPath = ("/Content/ASPNetSpellInclude");
+                            btnSpellButton2.FieldsToSpellCheck = "txtMessage";
+
+                        }
+                        @Html.Raw(btnSpellButton2.getHtml())
+                    </div>
+                </div>
+                <p><strong>Note:</strong>All AR comments/discussions will default to a public post with no alert/email notification However, if you like to send specific alert to individual(s), please check the appropriate boxes below</p>
+                <ul>
+                    <li style="width: 190px !important"><input type="checkbox" name="radiog_dark" id="chkapprovers" class="" /><label for="radio1" class="css-label">All Approvers</label></li>
+                    <li style="width: 190px !important"><input type="checkbox" name="radiog_dark" id="chkprojectmanager" class="" /><label for="radio2" class="css-label">Project Manager</label></li>
+                    <li style="width: 190px !important"><input type="checkbox" name="radiog_dark" id="chkorginator" class="" /><label for="radio3" class="css-label">Originator</label></li>
+                    <li style="width: 190px !important"><input type="checkbox" name="radiog_dark" id="chkpublic" class="" /><label for="radio4" class="css-label">Public<small> (no email sent)</small></label></li>
+                </ul>
+                <button class="btn primary-btn" id="btnPost">Post</button>
+            </div>
+        </div>
+       <div class="col-sm-12">
+           <div class="discussion-mail" style=" background-color: #fff; max-height:290px; overflow: scroll; width: 100%; padding-left:10px;">
+
+               @foreach (var discussion in Model.discussions)
+               {
+                   <div style="padding-left:10px;">
+                       @if (discussion.ToAddress != null && discussion.ToAddress.Count() > 0)
+                       {
+                       <span>To:</span> <span>@String.Join(",", discussion.ToAddress.Select(p => p.Name).ToList());</span><br />
+                       }
+                       <span>From:</span> <span>@discussion.From.Name</span><br />
+                       <span>Date:</span> <span>@discussion.Created</span><br />
+
+                       <br />
+                       <span>@discussion.Messsage</span>
+                       <hr>
+                   </div>
+               }
+           </div>            
+       </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    function SetError() {
+        $(".error").each(function (i, v) {
+            $(this).remove();
+            $(this).removeClass("inputTxtError");
+        });
+        $('input[required],select[required], textarea[required]').each(function (i, v) {
+            var value = $(this).val();
+            if (value == '' && value != "0") {
+                var name = $(this).attr("name");
+                var msg = '<label class="error" for="' + $(this).attr("name") + '">This field is required.</label>';
+                if (!$(this).hasClass("bs-select-hidden")) {
+                    $(this).addClass('inputTxtError').after(msg);
+                }
+                else {
+                    $(".bootstrap-select").addClass('inputTxtError').after(msg);
+                }
+                if (i == 0)
+                    $('input[name="' + name + '"]').focus();
+            }
+        });
+    }
+    $(document).ready(function () {
+       
+        var height = $(window).height();
+        $(".inner-container").css("height", height +200+ "px");
+        $('#btnPost').click(function () {
+            if ($.trim($('#txtMessage').val()) != '') {
+                var data = new FormData();
+                var arItemId = "@(Model.AR.AR_ID)";
+                data.append("message", $('#txtMessage').val());
+                data.append("ID", arItemId);
+                data.append("approvers", $('#chkapprovers').prop('checked'));
+                data.append("projectmanagers", $('#chkprojectmanager').prop('checked'));
+                data.append("originator", $('#chkorginator').prop('checked'));
+                data.append("arpublic", $('#chkpublic').prop('checked'));
+                 
+                @*data.append("division", "@Model.AR.Division.Value");
+
+                data.append("company", "@Model.AR.Company_Name.Value");*@
+
+                $.ajax({
+                    url: "/Discussion/SaveDiscussion",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (data) {
+
+                        var html = '';
+                        if (data != null && data != undefined) {
+                            if (data.ToAddress.length > 0) {
+                                html = '<span>To:<span><span>'
+                                $.each(data.ToAddress, function (key, item) {
+                                    html = html + item.Name + ';';
+                                })
+                                html = html + '</span><br/>';
+                            }
+
+                            html = html + '<span>From:<span><span>' + data.From.Name + '</span><br/>';
+                            html = html + '<span>Date:<span><span>' + data.Created + '</span><br/>';
+                            html = html + $('#txtMessage').val() + '<hr>';
+
+                                $('.discussion-mail').prepend(html);
+                                //alert('Success');
+                            $('#txtMessage').val('');
+                        }
+
+                    },
+                    error: function (error) {
+                        alert('Error');
+                    }
+                });
+            }
+            else
+            {
+                SetError();
+            }
+            });
+        
+    });
+</script>

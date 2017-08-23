@@ -1,0 +1,108 @@
+﻿@model SB.AR.AppWeb.ViewModels.ApprovalViewModel
+@{
+    var pathAndQuery = HttpContext.Current.Request.Url.Query;
+    var link = string.Empty;
+}
+<div id="approvalsscreen" class="tab-pane fade in active">  
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="approvals-table-wrapper">
+                <label style="width:100%;">Add your approval or rejection comments below. Comment is required for rejected ARs</label>
+                <input type="hidden" id="hdArId" value="@Model.ApprovalWorkflow.ID" />
+                <table style="width:100%;">
+                    <tr>
+                        <td valign="top" style="width:95%;">
+                            <textarea id="comments" cols="2" name="comments" style="min-height:130px;"></textarea>
+                        </td>
+                        <td valign="bottom">
+                            @{
+                                ASPNetSpell.Razor.SpellButton btnSpellButtonPresentSituationIssue = new ASPNetSpell.Razor.SpellButton();
+                                btnSpellButtonPresentSituationIssue.InstallationPath = ("/Content/ASPNetSpellInclude");
+                                btnSpellButtonPresentSituationIssue.FieldsToSpellCheck = "comments";
+                            }
+                            @Html.Raw(btnSpellButtonPresentSituationIssue.getHtml())
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="two-button-wrapper text-left pagination-btn">
+                    <a class="btn primary-btn" href="#" id="btnApprove">Approve</a>
+                    <a class="btn secondary-btn" id="btnReject" href="#">Reject</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .error {
+        color: red;
+        font-size: 10px;
+    }
+
+    .inputTxtError {
+        border: 1px solid #ff0000;
+        color: #0e0e0e;
+    }
+</style>
+<script type="text/javascript">
+   
+    $(function () {
+        function RemoveError()
+        {
+            $(".error").each(function (i, v) {
+                $(this).remove();
+                $(this).removeClass("inputTxtError");
+            });
+
+        }
+        $("#btnReject").click(function () {
+            RemoveError();
+            var comments = $("#comments").val();
+            if (comments == "") {
+                var msg = '<label class="error" for="comments" style="color:red;">Please enter your comments for reject.</label>';
+                $("#comments").addClass('inputTxtError').after(msg);  
+            }
+            else {
+                var wID = '@Model.ApprovalWorkflow.ID';
+                var jqxhr = $.post('/approvals/UpdateWorkflowStatus', {
+                    workflowid: wID,
+                    status: "Reject",
+                    approverComments: comments
+                })
+                .success(function (data) {                    
+                    if (data == 'True') {
+                        debugger
+                        var modal = document.getElementById('approvalModal');
+                        modal.style.display = "none";
+                        LoadApprovalData();
+                    }
+                })
+                .error(function () {
+
+                });
+            }
+        });
+        $("#btnApprove").click(function () {
+          
+            $("#comments").focus();
+            RemoveError();
+            var wID = '@Model.ApprovalWorkflow.ID';
+            var jqxhr = $.post('/approvals/UpdateWorkflowStatus', {
+                workflowId: wID, status: "Completed",
+                approverComments: ""
+            })
+                .success(function (data) {
+                    if (data == 'True') {
+                        var modal = document.getElementById('approvalModal');
+                        modal.style.display = "none";
+                        LoadApprovalData();
+                    }
+                })
+                .error(function () {
+
+                });
+        });
+    });
+
+</script>
+

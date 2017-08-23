@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<feature xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="84143612-2d3e-483f-be33-a2e298c835da" activateOnDefault="false" alwaysForceInstall="true" description="Checks whether an given employee is active or not in Active Directory" featureId="84143612-2d3e-483f-be33-a2e298c835da" imageUrl="$Resources:NWResource,WebPartFeature_ImageUrl_2010;" receiverAssembly="$SharePoint.Project.AssemblyFullName$" receiverClass="$SharePoint.Type.aec084d9-6410-4f1f-8210-d3002b8ea445.FullName$" scope="WebApplication" solutionId="00000000-0000-0000-0000-000000000000" title="Seaboard Nintex Custom Feature - Is Employee Active" version="AAEAAAD/////AQAAAAAAAAAEAQAAAA5TeXN0ZW0uVmVyc2lvbgQAAAAGX01ham9yBl9NaW5vcgZfQnVpbGQJX1JldmlzaW9uAAAAAAgICAgOAAAAAAAAAAAAAAAAAAAACw==" deploymentPath="$SharePoint.Project.FileNameWithoutExtension$_$SharePoint.Feature.FileNameWithoutExtension$" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/FeatureModel">
+  <projectItems>
+    <projectItemReference itemId="e3990fa8-5bad-4aa5-aed1-2ac76f95b18f" />
+  </projectItems>
+</feature>

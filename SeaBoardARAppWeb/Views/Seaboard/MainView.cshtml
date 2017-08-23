@@ -1,0 +1,464 @@
+﻿@model SB.AR.AppWeb.ViewModels.ARViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var activeTab = string.Empty;
+    if (ViewBag.ActiveTabForEdit != null)
+    {
+        activeTab = ViewBag.ActiveTabForEdit;
+    }
+
+    bool hasARID = true;
+    if (ViewBag.ActiveTabForEdit != null)
+    {
+        if (ViewBag.FindARID != null)
+        {
+            var arId = Convert.ToInt32(ViewBag.FindARID);
+            if(arId <= 0)
+            {
+                hasARID = false;
+            }
+        }
+        activeTab = ViewBag.ActiveTabForEdit;
+    }
+    var hostweburl = string.Empty;
+    if(Model.AR != null && !string.IsNullOrEmpty(Model.AR.SPHostUrl))
+    {
+        hostweburl = Model.AR.SPHostUrl;
+    }
+}
+
+<style>
+    #Visited a:visited {
+        color: white !important;
+    }
+    .container {
+        width: 970px !important;
+    }
+
+    chromeControl_bottomheader {
+        padding-left: 10px !important;
+    }
+
+    .ms-core-listMenu-verticalBox > .ms-core-listMenu-item, .ms-core-listMenu-verticalBox li.static > .ms-core-listMenu-item {
+        padding: 5px 0px !important;
+    }
+
+    #sideNavBox {
+        padding-left: 5px !important;
+    }
+    .dropdown-toggle {
+        text-transform: none !important;
+    }
+    .main-box-wrapper label{
+        /*width:50%;*/
+    }
+
+   
+</style>
+
+
+<div class="col-sm-12">
+    <div class="print-icon-with-heading">
+        <a id="printBtn" href="#"><img src="~/Content/Image/print-icon.png"></a>
+    </div>
+
+    <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="printmodal-content">
+                <span class="close">×</span>
+                <iframe id="reportFrame" style="min-height:600px;width:90%;" frameborder="1" scrolling="no">
+                    Your browser does not support iframes
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main-heading-wrapper" style="display:none;">
+    <h2 id="tabHeading">New Request</h2>
+</div>
+<div class="main-box-wrapper">
+    <div class="entry-form-wrapper" style="display:none;">
+        <ul class="row">
+            <li class="col-sm-12">
+                <label class="labels">AR Type*</label>
+            </li>
+            <li class="col-sm-4">
+                @Html.DropDownListFor(m => m.ARTypeViewModel.ARTypeID, new SelectList(Model.ARTypeViewModel.GetArTypes(), "Value", "Text"),
+                                  new { @id = "artype", @onchange = "ARDescription()", @class = "selectpicker select", @data_width = "100%", @title = "Select AR Type", @required = "required" })
+            </li>
+            <li class="col-sm-8">
+                <textarea id="artitle" placeholder=""></textarea>
+            </li>
+        </ul>
+        <div class="pull-right paddingRight">
+            <div class="two-button-wrapper" id="Visited">
+                <a class="btn primary-btn"  onclick="ConfirmCancelEntry()">Cancel</a>
+                <a class="btn secondary-btn" href="#" onclick="LoadMainView(1);">Next<i class="fa fa-angle-right" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="tab-wrapper" style="display:none;">
+        <input type="hidden" name="arType" id="arTypeHiddenValue" value="">
+        <ul class="nav nav-tabs">
+            <li id="limaintab" class="active"><a href="#maintab" data-toggle="tab" onclick="LoadPartial('/maintab/index', 'limaintab', 'Main Tab', 0)">Main</a></li>
+            <li id="linarrativetab"><a href="#narrative" data-toggle="tab" onclick="LoadPartial('/narrative/index', 'linarrativetab', 'Narrative Tab', 0)">Narrative</a></li>
+            <li id="lifinancialstab"><a href="#financials" data-toggle="tab" onclick="LoadPartial('/financials/index', 'lifinancialstab', 'Financials Tab', 0)">Financials</a></li>
+            <li id="liattachmentstab"><a href="#attachments" data-toggle="tab" onclick="LoadPartial('/attachments/index', 'liattachmentstab', 'Attachments Tab', 0)">Attachments</a></li>
+            @if (Model.AR != null && Model.AR.IsApproved)
+            { 
+            <li id="lidiscussiontab"><a data-toggle="tab" onclick="LoadPartial('/discussion/index', 'lidiscussiontab', 'Discussion Tab', 0)" href="#discussion">Discussion</a></li>
+            <li id="liapprovaltab"><a data-toggle="tab" href="#approvals" onclick="LoadPartial('/approvals/index', 'liapprovaltab', 'Approval Tab', 0)">Approvals</a></li>
+            }
+        </ul>
+        <div class="tab-content" id="main-tab-container">
+            <div class="loader" style="display:none;"></div>
+        </div>
+    </div>
+    <ul class="row" id="notarid" style="display:none;">
+        <li class="col-sm-12">
+            Application Error: Nintex Workflow failed to create AR ID for this AR hence system is unable to identify the approval process. Please check with SharePoint Admin team to resolve this issue.
+        </li>
+    </ul>
+</div>
+
+<div id="Confirmation" style="display:none; cursor: default">
+    <h1>Are you sure you want to Cancel?</h1>
+    <div class="two-button-wrapper text-center pagination-btn" style="margin-bottom:30px; margin-top:0px;">
+        <a style="margin-top:15px" class="btn primary-btn" id="yes">Yes</a>
+        <a style="margin-top:15px" class="btn primary-btn" id="no">No</a>
+
+    </div>
+</div> 
+<script src="~/Scripts/Seaboard/bootstrap.js"></script>
+<script type="text/javascript">
+    function ConfirmCancelEntry() {       
+            $.blockUI({
+                message: $('#Confirmation'), css: { width: '500px' }
+            });
+            var hostweburl = decodeURIComponent(getQueryStringParameter("SPHostUrl"));
+            $('#yes').click(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Home/CancelAR',
+                    data: {},
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                        window.location.href = '/Home/Index?SPHostUrl=' + hostweburl;
+                        $.unblockUI();
+                    },
+                    complete: function() { 
+                        // unblock when remote call returns 
+                        $.unblockUI(); 
+                    } ,
+                    error: function () {
+                        $.unblockUI();
+                    }
+                });
+            });
+            $('#no').click(function () {
+                $.unblockUI();
+                return false;
+            });
+           
+    }
+    equalheight = function (container) {
+        var currentTallest = 0,
+             currentRowStart = 0,
+             rowDivs = new Array(),
+             $el,
+             topPosition = 0;
+        $(container).each(function () {
+            $el = $(this);
+            $($el).height('auto')
+            topPostion = $el.position().top;
+
+            if (currentRowStart != topPostion) {
+                for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+                    rowDivs[currentDiv].height(currentTallest);
+                }
+                rowDivs.length = 0; // empty the array
+                currentRowStart = topPostion;
+                currentTallest = $el.height();
+                rowDivs.push($el);
+            } else {
+                rowDivs.push($el);
+                currentTallest = (currentTallest < $el.height()) ? ($el.height()) : (currentTallest);
+            }
+            for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+                rowDivs[currentDiv].height(currentTallest);
+            }
+        });
+    }
+    $(window).load(function () {
+        equalheight('.main-box-wrapper > div');
+        equalheight('.three-block > li');
+    });
+    $(window).resize(function () {
+        equalheight('.main-box-wrapper > div');
+        equalheight('.three-block > li');
+    });
+</script>
+<!-- Slider -->
+<script src="~/Scripts/Seaboard/owl.carousel.js"></script>
+<!-- Select-DatePikcer etc... -->
+<script type="text/javascript" src="~/Scripts/Seaboard/html5shiv.js"></script>
+<script type="text/javascript" src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Seaboard/moment-with-locales.js"></script>
+<script type="text/javascript" src="~/Scripts/Seaboard/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="~/Scripts/Seaboard/bootstrap-datetimepicker.min.js"></script>
+<style type="text/css">
+    .paddingRight {
+        padding-right: 30px;
+    } 
+    .error {
+        color: red !important;
+        font-size: 10px;
+    }
+    .inputTxtError {
+        border: 1px solid #ff0000;
+        color: #0e0e0e;
+    }
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 9999; /* Sit on top */
+        padding-top: 10px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .printmodal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 750px;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+<script type="text/javascript">
+    function loadARReport() {
+        url = "/Reports/ReportViewerPage.aspx";
+        var reportFrame = document.getElementById('reportFrame');
+        if (reportFrame != null) {
+            if (reportFrame.src) {
+                reportFrame.src = url;
+            }
+            else if (reportFrame.contentWindow !== null && reportFrame.contentWindow.location !== null) {
+                reportFrame.contentWindow.location = url;
+            }
+            else {
+                reportFrame.setAttribute("src", url);
+            }
+        }
+    }
+    var modal = document.getElementById('myModal');
+    var btn = document.getElementById("printBtn");
+    var span = document.getElementsByClassName("close")[0];
+    btn.onclick = function () {
+        loadARReport();
+        $("#myModal").find(".printmodal-content").css("margin-top", "100px");
+        $('#myModal').modal('show');
+    }
+    span.onclick = function () {
+        //modal.style.display = "none";
+        $('#myModal').modal('hide');
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    var data = {};
+
+
+    $(document).ready(function () {
+        $('.datetimepicker').datetimepicker({ format: 'MM-DD-YYYY' });
+        $('.selectpicker').selectpicker();
+        $(".tab-wrapper").hide();
+        $("#notarid").hide();
+        
+
+        if ('@activeTab' != '' && '@hasARID' == 'True') {
+            $('.nav-tabs a[href="#@activeTab"]').trigger('click');
+            $(".tab-wrapper").show();
+            $(".entry-form-wrapper").hide();
+            $(".main-heading-wrapper").hide();
+            $("#notarid").hide();
+            $(".print-icon-with-heading").show();
+
+        }
+        else if ('@hasARID' == 'False') {
+            $(".tab-wrapper").hide();
+            $(".main-heading-wrapper").hide();
+            $(".entry-form-wrapper").hide();
+            $("#notarid").show();
+            $(".print-icon-with-heading").hide();
+        }
+        
+        else
+        {
+            $(".tab-wrapper").hide();
+            $("#notarid").hide();
+            $(".main-heading-wrapper").show();
+            $(".entry-form-wrapper").show();
+        }
+
+        
+    });
+
+    function ARDescription()
+    {
+        var arTypeId = $('select#artype option:selected').text();
+        var jqxhr = $.post("/entry/getdescription", { arTypeId: arTypeId })
+            .success(function (desc) {
+                $("#artitle").val(desc);
+            })
+            .error(function () {
+
+            });
+    }
+    function LoadMainView(id) {
+        var arTypeId = $('select#artype option:selected').val();
+        if (arTypeId === undefined || arTypeId == "") {
+            SetError();
+        }
+        else {
+
+            $(".tab-wrapper").show();
+            $(".entry-form-wrapper").hide();
+            LoadPartial('/maintab/index' + location.search, 'limaintab', 'Main Tab', id);
+        }
+    }
+    function SaveAR(id, controller, method) {
+        $.blockUI({
+            message: '<h1>Please, wait...</h1>'
+        });
+       
+        var isvalid = true;//$("form")[0].checkValidity();
+        var path = "/" + controller + "/" + method;
+        if (isvalid) {
+            $.ajax({
+                type: 'POST',
+                url: path,
+                data: $('#arfrm').serialize(),
+                dataType: 'json',
+                async: false,
+                success: function (data)
+                {
+                    var retObject = jQuery.parseJSON(data);
+                //    $.unblockUI();
+                    if (retObject.IsRedirect == false){
+                            ActiveTab(id);
+                        }
+                        else{
+                            var hostweburl =decodeURIComponent(getQueryStringParameter("SPHostUrl"));
+                            window.location.href = '/Home/Index?SPHostUrl='+ hostweburl;
+                        }
+                    },
+                error: function () {
+                    $.unblockUI();
+                }
+            });
+        }
+        else
+        {
+            $.unblockUI();
+            SetError();
+        }
+    }
+    function LoadPartial(path, activeId, tabHeadingText, id) {
+        var isTabClick = false;
+        $.blockUI({
+            message: '<h1>Please, wait...</h1>'
+        });
+
+        $(".nav-tabs li").each(function (index) {
+            $(this).removeClass('active');
+        });
+        var arTypeId = $('select#artype option:selected').val();
+        var arTitle = $('#artitle').val();
+        $('#arTypeHiddenValue').val(arTypeId);
+        if (id == 0)
+        {
+            arTypeId = "";
+            arTitle = 0;
+            isTabClick = true;
+        }
+        //debugger
+        var controller = $('#CrntTab').val();
+        if (controller === undefined || controller == '') {
+            LoadHtml(path, activeId, tabHeadingText, id, arTypeId, arTitle, isTabClick);
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                url: controller,
+                data: $('#arfrm').serialize(),
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    LoadHtml(path, activeId, tabHeadingText, id, arTypeId, arTitle, isTabClick);
+                },
+                error: function () {
+                    $.unblockUI();
+                }
+            });
+        }
+        
+    }
+
+    function LoadHtml(path, activeId, tabHeadingText, id, arTypeId, arTitle, isTabClick)
+    {
+        $("#main-tab-container").load(path, { arTypeId: arTypeId, arTitle: arTitle, isTabClick: isTabClick }, function (responseTxt, statusTxt, xhr) {
+            if (statusTxt == "success") {
+                equalheight('.main-box-wrapper > div');
+                equalheight('.three-block > li');
+                $('select#artype option:selected').val();
+                $.unblockUI();
+                $("#" + activeId).addClass('active');
+                $("#tabHeading").text(tabHeadingText);
+                var owl = $(".dashboard-table");
+                owl.owlCarousel({
+                    navigation: true,
+                    singleItem: true,
+                    transitionStyle: "fadeUp",
+
+                });
+                $("#transitionType").change(function () {
+                    var newValue = $(this).val();
+                    owl.data("owlCarousel").transitionTypes(newValue);
+                    owl.trigger("owl.next");
+                });
+            }
+            else if (statusTxt == "error")
+                $.unblockUI();
+        });
+    }
+</script>
+
+
+

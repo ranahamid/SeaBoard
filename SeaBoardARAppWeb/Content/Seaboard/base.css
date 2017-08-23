@@ -1,0 +1,133 @@
+/* ==========================================================================
+   Basic Styles
+   ========================================================================== */
+   ::selection {
+      background: rgba(0, 0, 0, 0.1) none repeat scroll 0 0;
+   }
+   ::-moz-selection {
+      background: rgba(0, 0, 0, 0.1) none repeat scroll 0 0;
+   }
+   a:focus{
+      outline: 0;
+      outline-offset: 0;
+      text-decoration: none;
+   }
+   p:last-of-type{
+      margin-bottom: 0;
+      padding-bottom: 0;
+   }
+   img{
+      max-width: 100%;
+   }
+   iframe{
+      vertical-align: top;
+   }
+
+
+
+
+
+/* Font Family
+   ========================================================================== */
+      body{
+         font-family: 'Ubuntu', sans-serif;
+         color: #666;
+         background-color: #fff;
+         font-size: 16px;
+      }
+      h1, h2, h3, h4, h5, h6{
+          font-family: 'Montserrat', sans-serif;
+          margin: 0;
+          color: #333;
+      }
+      p{
+         line-height: 1.6;
+      }
+   
+
+/* Heading
+   ========================================================================== */
+         h1{
+            font-size: 32px;
+         }
+         
+
+
+/* UL LI
+   ========================================================================== */
+      ul li{list-style: none;}
+      ul{margin: 0; padding: 0;}
+      .bulleted-list{
+         margin: 0 0 0 15px;
+         padding: 0;
+      }
+      .bulleted-list li{
+         list-style: outside none disc;
+      }
+      .bulleted-list.no-bullet li{
+         list-style: none;
+      }
+      .bulleted-list.no-bullet{
+         margin-left: 0;
+      }
+
+/* Link Color
+   ========================================================================== */
+   a{
+      transition: all 0.5s ease 0s;
+      color: #666;
+   }
+   a:hover{
+      text-decoration: none;
+      transition: all 0.5s ease 0s;
+      -webkit-transition: all 0.5s ease 0s;
+      color: #99cd00;
+   }
+
+
+/* Button
+   ========================================================================== */
+      .btn{
+         border-radius: 2px;
+         color: #ffffff;
+         font-weight: 700;
+         line-height: 1;
+         padding: 16px 42px;
+         text-transform: uppercase;
+      }
+      .btn i{
+         padding-left: 10px;
+      }
+      .btn i.fa-angle-left{
+         padding-left: 0;
+         padding-right: 10px;
+      }
+      .btn:hover{
+         color: #ffffff;
+      }
+      .primary-btn{
+         background-color: #009FE3;
+      }
+      .primary-btn:hover{
+         background-color: #014181;
+      }
+      .secondary-btn{
+         background-color: #014181;
+      }
+      .secondary-btn:hover{
+         background-color: #009FE3;
+      }
+      .third-btn{
+         background-color: transparent;
+         border: 2px solid rgba(0, 0, 0, 0.2);
+         color: rgba(0, 0, 0, 0.2);
+         padding: 14px 42px;
+      }
+      .third-btn:hover{
+         background-color: #009FE3;
+      }
+
+
+      .two-button-wrapper .btn + .btn{
+         margin-left: 10px;
+      }

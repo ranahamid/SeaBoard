@@ -1,0 +1,21 @@
+﻿@model SB.AR.AppWeb.ViewModels.NavigationViewModel
+
+@{
+    var hostUrl = string.Format("?SPHostUrl={0}", Model.HostUrl);
+    //https%3A%2F%2Farappdev.seaboardcorp.com
+}
+
+@{if (Model.Navigation != null)
+    {
+        foreach (SB.AR.AppWeb.Models.NavigationAR item in Model.Navigation)
+        {
+
+            if ((@item.Status) == "Active")
+            {
+                var link = @item.URL + hostUrl;
+                <li class="static"><a href="@link" class="static ms-quicklaunch-dropNode menu-item ms-core-listMenu-item ms-displayInline ms-navedit-linkNode ms-droppable">@item.Title</a></li>
+            }
+
+        }
+    }
+}

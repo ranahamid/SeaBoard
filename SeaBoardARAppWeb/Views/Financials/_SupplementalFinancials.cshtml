@@ -1,0 +1,85 @@
+﻿@model SB.AR.AppWeb.ViewModels.SupplementalFinancialsViewModel
+<form id="arfrm" method="post" action="/financials/savear" enctype="application/x-www-form-urlencoded">
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.HiddenFor(m => Model.AR.ID)
+    <input type="hidden" name="IsFinanceTab" value="true">
+    <ul class="row narrative-bottom-area">
+        <li class="col-sm-6 financial-top-area">
+            <div class="vertical-middle">
+                <label>Original AR Number</label>
+                @Html.EditorFor(m => m.OriginalAR, new { placeholder = "1500" })
+            </div>
+            <div class="vertical-middle">
+                <label>Amount of Additional Funds Required</label>
+                @Html.EditorFor(model => model.AdditionaAmountFundsRequired, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Original AR Amount</label>
+                @Html.EditorFor(model => model.Original_AR_Amount, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+        </li>
+        <li class="col-sm-12 total-cost-highlight">
+            <div class="row">
+                <div class="col-sm-6 financial-top-area">
+                    <div class="vertical-middle total-cost-wrapper">
+                        <label><b>Total Cost</b></label>
+                        @Html.EditorFor(m => m.Total_Cost, new { htmlAttributes = new { @class = "greyBold number", @required = "required", @type = "text", @min = "0" } })
+                    </div>
+                    <div class="vertical-middle">
+                        <label>Budget Amount</label>
+                        @Html.EditorFor(m => m.Budget_Amount, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "0" } })
+                    </div>
+                </div>
+                <div class="col-sm-6 financial-top-area">
+                    <div class="budget-line-item">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div>
+                                    <label class="LabelFulll">Budget Line Item #</label>
+                                    @Html.EditorFor(m => m.BudgetLineItem, new { htmlAttributes = new { @type = "text", @class = "LabelFulll" } })
+                                </div>
+                            </div>
+                            <div class="col-sm-6 budget-checkbox">
+                                <div class="checkbox">
+                                    <label for="CheckBoxFor" class="CheckBoxLable css-label">In Budget</label>
+                                    @Html.CheckBoxFor(m => m.In_Budget, new { })
+                                </div>
+                                <div class="checkbox">
+                                    <label for="Funds_Committed" class="CheckBoxLable css-label">Funds Commited</label>
+                                    @Html.CheckBoxFor(m => m.Funds_Committed, new {  })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <script src="~/Scripts/Seaboard/CurrencyFormatter.js"></script>
+    <script type="text/javascript">
+      
+        $(document).ready(function () {
+            var height = $(window).height();
+            $(".inner-container").css("height", height + 280 + "px");
+            totalCostCalculate();
+            function totalCostCalculate() {
+                var origAmount = $("#Original_AR_Amount").val();
+                origAmount = origAmount.replace("$", "");
+                if (origAmount == "")
+                    origAmount = "0";
+
+                var addAmount = $("#AdditionaAmountFundsRequired").val();
+                addAmount = addAmount.replace("$", "");
+                if (addAmount == "")
+                    addAmount = "0";
+
+                var total = parseFloat(origAmount.replace(/[\,]/g, '')) + parseFloat(addAmount.replace(/[\,]/g, ''));
+                SetTotalCost(total);
+            }
+            $("#Original_AR_Amount,#AdditionaAmountFundsRequired").blur(function () {
+                totalCostCalculate();            
+            });
+        });
+    </script>
+</form>

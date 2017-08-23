@@ -1,0 +1,181 @@
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+		@media screen and (max-width: 1200px) {
+			.container{
+				width: 100%;
+			}
+		}
+		@media screen and (max-width: 980px) {
+			.main-box-wrapper > div.right-panel,
+			.main-box-wrapper .right-panel + .left-panel,
+			.main-box-wrapper > div.left-panel{
+				float: none;
+				max-width: 100%;
+				margin: 0;
+				height: auto!important;
+			}
+			.main-box-wrapper .right-panel + .left-panel{
+				margin-top: 30px;
+			}
+			.main-box-wrapper > div.left-panel{
+				padding: 20px;
+			}
+			.tab-wrapper .nav-tabs > li > a{
+				padding: 8px 12px;
+				font-size: 14px;
+			}
+			.btn {
+				padding: 14px 22px;
+			}
+			.three-block label{font-size: 14px;}
+		}
+		@media screen and (max-width: 767px) {
+			.three-block > li{
+				height: auto!important;
+			}
+			header .logo {
+				float: none;
+				max-width: 100%;
+				padding-bottom: 15px;
+				padding-right: 0;
+				text-align: center;
+			}
+			header .search-area {
+				float: none;
+				padding-top: 0;
+				max-width: 100%;
+			}
+			.search-window-area > ul > li .row > li,
+			.search-window-area > ul > li .row > div,
+			.entry-form-wrapper ul li,
+			.created-wrapper > li{
+				margin-bottom: 20px;
+			}
+			.search-window-area > ul > li .row > li:last-child,
+			.search-window-area > ul > li .row > div:last-of-type,
+			.entry-form-wrapper ul li:last-child,
+			.created-wrapper > li:last-child{
+				margin-bottom: 0;
+			}
+			.two-button-wrapper{
+				margin-top: 10px;
+			}
+			.created-wrapper > li,
+			.three-block div.dcc-list{
+				display: inline-block;
+				width: 100%;
+			}
+			.created-wrapper label {
+				padding: 0 0 10px;
+			}
+			.main-box-wrapper .tab-wrapper ul{
+				display: inline-block;
+				width: 100%;
+			}
+			.main-box-wrapper .tab-wrapper ul.row{
+				display: table;
+				width: auto;
+			}
+			.three-block > li.checkbox-list {
+				border-left: none;
+				border-right: none;
+				border-top: 1px dashed rgba(0, 0, 0, 0.15);
+				border-bottom: 1px dashed rgba(0, 0, 0, 0.15);
+			}
+			.tab-wrapper .nav-tabs > li {
+				display: inline-block;
+				float: none;
+				margin-bottom: 10px;
+			}
+			.main-box-wrapper .tab-wrapper ul.nav.nav-tabs {
+				display: inline-block;
+				text-align: center;
+				width: 100%;
+			}
+			.tab-wrapper .nav-tabs > li > a {
+				border: medium none;
+				border-radius: 2px;
+			}
+			.tab-wrapper .nav-tabs > li.active > a, .tab-wrapper .nav-tabs > li > a:hover {
+				background-color: #99CD00;
+				color: #fff;
+			}
+			.budget-checkbox label{
+				padding-bottom: 0;
+			}
+		}
+		@media screen and (max-width: 640px) {
+			.main-heading-wrapper h2{
+				font-size: 25px;
+			}
+			.three-block-table h3{
+				font-size: 18px;
+			}
+			.main-heading-wrapper{
+				margin-top: 25px;
+			}
+			.inner-container{
+				padding-bottom: 25px;
+			}
+			.three-block-table{
+				margin-bottom: 30px;
+			}
+			footer .container > .row{
+				display: block;
+			}
+			footer .container > .row > div{
+				text-align: center;
+			}
+			.flogo {
+				float: none;
+				padding-bottom: 20px;
+			}
+			.pagination-btn .btn{
+				margin-bottom: 10px;
+			}
+			.print-icon-with-heading{
+				top: -62px;
+			}
+		}
+		@media screen and (max-width: 480px) {
+			.financial-top-area > div.vertical-middle{
+				display: block; 
+			}
+			.financial-top-area .input-group, .financial-top-area .btn-group {
+				margin-left: 0 !important;
+			}
+			label {
+				font-size: 14px;
+				padding-bottom: 4px;
+			}
+
+			.upload-section-wrapper .upload-area-inner form input[type="text"],
+	   		.upload-section-wrapper .upload-area-inner form label{
+	   			float: none;
+	   		}
+	   		.upload-section-wrapper .upload-area-inner form input[type="text"]{
+	   			max-width: 100%;
+	   			margin-bottom: 10px;
+	   		}
+	   		.upload-section-wrapper .upload-area-inner form label{
+				border-radius: 2px;
+				max-width: 100%;
+				margin-bottom: 10px;
+	   		}
+		}
+		@media screen and (max-width: 360px) {
+			.two-button-wrapper a{
+				width: 100%;
+				margin: 0 0 10px 0;
+			}
+			.two-button-wrapper a:last-of-type{
+				margin: 0;	
+			}
+			.two-button-wrapper .btn + .btn{
+				margin-left: 0;
+			}
+			.entry-form-wrapper .pull-right{
+				float: none!important;
+			}
+		}

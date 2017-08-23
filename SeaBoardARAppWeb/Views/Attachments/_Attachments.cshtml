@@ -1,0 +1,430 @@
+﻿@model SB.AR.AppWeb.ViewModels.ARAttachmentsViewModel
+<style>
+    .main-box-wrapper label {
+        width: auto !important;
+    }
+    #arFiles li a {
+        color: #428bca;
+    }
+</style>
+<div id="attachmentstab" class="tab-pane fade in active">
+    @{
+        var totalCost = String.Format("{0:C}", Model.AR.Total_Cost);
+    }
+    <ul class="row created-wrapper narrative-top-area">
+        <li class="col-sm-12">
+            <label>AR Title:</label>
+            @*<div>
+                <a href="#">@Model.AR.Title</a>
+
+            </div>*@
+            <span style="font-weight: bold !important; color: #009FE3;">@Model.AR.Title</span>
+        </li>
+        <li class="col-sm-4">
+            <label>AR ID:</label>
+            <span>@Model.AR.AR_ID</span>
+        </li>
+        <li class="col-sm-4">
+            <label>AR Type:</label>
+            <span>@Model.AR.AR_Type</span>
+        </li>
+        <li class="col-sm-4">
+            <label>Current Status:</label>
+            <span>@Model.AR.Current_Status</span>
+        </li>
+
+        <li class="col-sm-4">
+            <label><b>Total Cost:</b></label>
+            <label><b>@totalCost</b></label>
+        </li>
+        <li class="col-sm-4">
+            <label>Division:</label>
+            @{ if (Model.AR.Division != null)
+             {<span>@Model.AR.Division.Value</span>}
+             else
+             {<span>&nbsp;</span>}
+            }
+        </li>
+        <li class="col-sm-4">
+            <label>Company:</label>
+            @{ if (Model.AR.Company_Name != null)
+             {
+                <span>@Model.AR.Company_Name.Value</span>}
+             else
+             {
+                <span>&nbsp;</span>}
+
+            }
+        </li>
+    </ul>
+    <div class="row upload-section-wrapper">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div class="upload-area-inner">
+                <form>
+                    <span>Attachments</span>
+                    <div>
+                        <input type="hidden" name="CrntTab" id="CrntTab" value="">
+                        <input required readonly id="selectedFile" type="text" placeholder="">
+                        <label class="btn third-btn">Browse<input name="arFile" id="arFile" type="file" style="display: none;"></label>
+                    </div>
+                    <div id="error" style="display:none"></div>
+                    <button id="uploadFile" type="button" class="btn primary-btn">Upload</button>
+                </form>
+                <ul id="arFiles">
+                    @if (Model.attachments != null)
+                    { 
+                        
+                        foreach (var attachment in Model.attachments)
+                        {
+                            string dURL = @Url.Action("Download", "Attachments") + "?file=" + attachment.FileName; 
+                            <li lineId="@attachment.FileName"> 
+                                <a href="@dURL"> @attachment.FileName </a>
+                                &nbsp;&nbsp;         
+                                @if (Model.AR != null && Model.IsDeletable)
+                                {   
+                                <a class="delfile" onclick="DeleteFile('@attachment.FileName')" href="#"> <img src="~/content/image/delete.png" alt="delete"/></a>
+                                }
+                            </li>
+                        }
+                    }
+                    
+                </ul>
+               @using (Html.BeginForm("DownloadFiles", "Attachments", new { AttachmentFolderId = @Model.AR.Attachment_Folder_Id }))
+               {
+                <button id="downLoadFile" type="submit" class="btn secondary-btn">Download All</button>
+               }
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <div id="btngrpDiv"></div>
+</div>
+<div id="validationModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="valClose">×</span>
+        <div id="validation-main-screen"></div>
+    </div>
+</div>
+<div id="ConfirmationAttachment" style="display:none; cursor: default">
+    <h1>AR Submission Successful</h1>
+    <div class="two-button-wrapper text-center pagination-btn" style="margin-bottom:30px; margin-top:0px;">
+        <a style="margin-top:15px" class="btn primary-btn" id="ok">OK</a>
+    </div>
+</div> 
+<div id="ARMissing" style="display:none; cursor: default">
+    <h1>An error occured, try again later.</h1>
+    <div class="two-button-wrapper text-center pagination-btn" style="margin-bottom:30px; margin-top:0px;">
+        <a style="margin-top:15px" class="btn primary-btn" id="arok">Ok</a>
+    </div>
+</div> 
+<style type="text/css">
+    /* THESE STYLES FOR PRINT POPUP */
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 999; /* Sit on top */
+        padding-top: 10px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<script type="text/javascript">
+    function insDelCSS() {
+        
+        $("<style type='text/css'> .delfile{ display:none; } </style>").appendTo("head");
+    }
+
+    @if (ViewBag.IsSiteAdmin == false && !Model.IsDeletable)
+    {
+        <text>insDelCSS();</text>
+    }
+    
+
+    var valmodal = document.getElementById('validationModal');
+    var valspan = document.getElementById("valClose");
+    valspan.onclick = function () {
+        valmodal.style.display = "none";
+        $("#validationModal").hide();
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            valmodal.style.display = "none";
+        }
+    }
+    $('#arok').click(function () {
+        $.unblockUI();
+        return false;
+    });
+    function SetError() {
+        $('#error').val();
+        $(".error").each(function (i, v) {
+            $(this).remove();
+            $(this).removeClass("inputTxtError");
+        });
+        $('input[required],select[required], textarea[required]').each(function (i, v) {
+            var value = $(this).val();
+            if (value == '' && value != "0") {
+                var name = $(this).attr("name");
+                var msg = '<span class="error" for="' + $(this).attr("name") + '">This field is required.</span>';
+                if (!$(this).hasClass("bs-select-hidden")) {
+                    //$(this).addClass('inputTxtError').after(msg);
+                    $('#error').show();
+                    $('#error').append(msg);
+                }
+                else {
+                    $(".bootstrap-select").addClass('inputTxtError').after(msg);
+                }
+                if (i == 0)
+                    $('input[name="' + name + '"]').focus();
+            }
+        });
+    }
+    $(document).ready(function () {
+        var height = $(window).height();
+        $(".inner-container").css("height", height + 100 + "px");
+        //debugger;
+        LoadBtnPartial('/home/buttons');
+        @*$('#downloadFile').click(function () {
+            var ARNumber = "@(ViewBag.ARNumber)";
+        });*@
+
+        $('#arFile').change(function () {
+            var control = document.getElementById('arFile');
+            $('#selectedFile').val(control.files[0].name);
+        });
+
+        $('#uploadFile').click(function () {
+            $('#error').hide();
+            var control = document.getElementById('arFile');
+            if ($('#selectedFile').val() != '') {
+                var data = new FormData();
+
+
+                var ARNumber = "@(Model.AR.Attachment_Folder_Id)";
+                if (ARNumber == '') {
+                    $.blockUI({
+                        message: $('#ARMissing'), css: { width: '700px', margin: '0px 0px 0px -100px' }
+                    });
+                    return;
+                }                
+                var imagePath = '@Url.Content("~/content/image/delete.png")';
+                data.append("UploadedFile", control.files[0]);
+                data.append("ARNumber", ARNumber);
+                $.ajax({
+                    url: "/Attachments/UploadFile",
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (data) {
+                        var liHtml = '<li lineId="' + control.files[0].name + '"><a href="/Attachments/Download?file=' + control.files[0].name + '">' + control.files[0].name + '</a>&nbsp;&nbsp;<a class="delfile" onclick="DeleteFile(\'' + control.files[0].name + '\')" href="#"><img src="' + imagePath + '" alt="delete"/></a></li>';
+                        $('#arFiles').append(liHtml)
+                        $('#selectedFile').val('');
+                        var height = $(window).height();
+                        $(".inner-container").css("height", height + 100 + "px");
+                        //alert('Success');
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                });
+            }
+            else {
+                SetError();
+            }
+        });
+    });
+
+    function SaveARAsDraft()
+    {
+        $.blockUI({
+            message: '<h1>Please, wait...</h1>'
+        });
+        $.ajax({
+            url: "/Attachments/SaveARAsDraft",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: '',
+
+            success: function (results) {
+                var hostweburl = decodeURIComponent(getQueryStringParameter("SPHostUrl"));
+                window.location.href = '/Home/Index?SPHostUrl=' + hostweburl;
+            },
+            error: function (error) {
+                $.unblockUI();
+                alert('Error');
+            }
+        });
+    }
+    function SaveARAsSubmitRMReview() {
+        $.blockUI({
+            message: '<h1>Please, wait...</h1>'
+        });
+        $.ajax({
+            url: "/Attachments/SaveARAsSubmitRMReview",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: '',
+
+            success: function (results) {
+                var hostweburl = decodeURIComponent(getQueryStringParameter("SPHostUrl"));
+                window.location.href = '/Home/Index?SPHostUrl=' + hostweburl;
+            },
+            error: function (error) {
+                $.unblockUI();
+                alert('Error');
+            }
+        });
+    }
+    function SubmitAR()
+    {
+        $.blockUI({
+            message: '<h1>Please, wait...</h1>'
+        });
+
+        $.ajax({
+            url: "/Attachments/SubmitAR",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: '',
+
+            success: function (results) {
+                if (results.length > 0) {
+                    $.unblockUI();
+                    var html = '<div style="color:red;text-align:center;min-width:100%">AR Submission Unsuccessful</div>';
+                    html=html + '<div style="padding:15px">Your attempt to submit the AR was unsuccessful. In order to submit the AR reqest for approvals, you must provide the information requested below:</div>';
+                    var tab = '';
+                    html = html + '<div style=height:200px;overflow-y:scroll>';
+                    $.each(results, function (key, item) {
+                        if (tab != item.Tab) {
+                            if(item.Tab == 'MAIN')
+                                html = html + '<hr><div><a href="#maintab" data-toggle="tab" onclick="RedirectToView(\'MAIN\')">' + item.Tab + '</a></div><hr>';
+                            else if (item.Tab == 'NARRATIVE')
+                                html = html + '<hr><div><a href="#maintab" data-toggle="tab" onclick="RedirectToView(\'NARRATIVE\')">' + item.Tab + '</a></div><hr>';
+                            else if (item.Tab == 'FINANCIALS')
+                                html = html + '<hr><div><a href="#maintab" data-toggle="tab" onclick="RedirectToView(\'FINANCIALS\')">' + item.Tab + '</a></div><hr>';
+                            tab = item.Tab;
+                        }
+                        html = html + '<div>' + item.Message + '</div>'
+                    })
+
+                    html = html + '<div style="padding:10px">Please provide the information and resubmit</div></div>'
+                    ShowMessage(html);
+                }
+                else
+                {
+                    $.unblockUI();
+                    $.blockUI({
+                        message: $('#ConfirmationAttachment'), css: { width: '500px' }
+                    });
+                    //var html = '<div style="color:green;text-align:center;min-width:100%">AR Submission Successful</div>';
+                    //ShowMessage(html);
+                }
+            },
+            error: function (error) {
+                $.unblockUI();
+                alert('Error');
+            }
+        });
+    }
+    $('#ok').click(function () {
+        var hostweburl = decodeURIComponent(getQueryStringParameter("SPHostUrl"));
+        window.location.href = '/Home/Index?SPHostUrl=' + hostweburl;
+        $.unblockUI();
+        return false;
+    });
+    function RedirectToView(tab)
+    {
+        $('#dialog').dialog('close');
+        $('#dialog').remove();//('close');
+        if (tab == 'MAIN')
+            LoadPartial('/maintab/index', 'limaintab', 'Main Tab', 0);
+        else if (tab == 'NARRATIVE')
+            LoadPartial('/narrative/index', 'linarrativetab', 'Narrative Tab', 0);
+        else if (tab == 'FINANCIALS')
+            LoadPartial('/financials/index', 'lifinancialstab', 'Finanace Tab', 0);
+    }
+
+    function ShowMessage(message, title) {
+        if (title == undefined || title == 'undefined' || title == null) {
+            title = '';
+        }
+        valmodal.style.display = "block";
+        $("#validation-main-screen").empty();
+        $("#validation-main-screen").html(message);
+        $("#validation-main-screen").show();
+
+    }
+    function DeleteFile(fileName)
+    {
+        var data = new FormData();
+        var ARNumber = "@(Model.AR.Attachment_Folder_Id)";
+        data.append("FileName", fileName);
+        data.append("ARNumber", ARNumber);
+        $.ajax({
+            url: "/Attachments/DeleteFile",
+            type: "POST",
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (data) {
+                $('[lineId="' + fileName + '"').remove();
+                //alert('Success');
+            },
+            error: function (error) {
+                alert('Error');
+            }
+        });
+        // alert(fileName);
+    }
+
+
+
+
+
+    function LoadBtnPartial(path) {
+        $("#btngrpDiv").load(path, { idPrev: "financials", idNext: "discussion" }, function (responseTxt, statusTxt, xhr) {
+            $('#btnSubmitValidate').show();
+            if (statusTxt == "success") {
+            }
+            else if (statusTxt == "error")
+                alert("Error: " + xhr.status + ": " + xhr.statusText);
+        });
+
+    }
+</script>

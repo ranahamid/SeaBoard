@@ -1,0 +1,116 @@
+﻿@model SB.AR.AppWeb.ViewModels.ExpenseFinancialsViewModel
+<form id="arfrm" method="post" action="/financials/savear" enctype="application/x-www-form-urlencoded">
+
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <input type="hidden" name="id" value="@Model.AR.ID">
+    <input type="hidden" name="IsFinanceTab" value="true">
+    <ul class="row narrative-bottom-area">
+        <li class="col-sm-6 financial-top-area">
+            <div class="vertical-middle">
+                <label>Purchased Price<span class="mandatory">*</span></label>
+                @Html.EditorFor(model => model.Purchase_Price, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>TAX/VAT@*<span class="mandatory">*</span>*@</label>
+                @Html.EditorFor(model => model.TaxVAT, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Services/ Installation</label>
+                @Html.EditorFor(model => model.ServicesInstallation, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Other Costs or Savings</label>
+                @Html.EditorFor(model => model.Other_Cost_or_Savings, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+        </li>
+        <li class="col-sm-6 financial-top-area">
+            <div class="vertical-middle dcc-list">
+                <label class="labels">Investment Type</label>
+                @Html.DropDownListFor(m => m.InvestmentType, new SelectList(Model.InvestmentTypes, "Value", "Text"),
+                                  new { @id = "artype", @class = "selectpicker select", @data_width = "53%", @title = "Select Investment Type" })
+            </div>
+            <div class="vertical-middle ">
+                <label>Economical Life</label>
+                @Html.EditorFor(m => m.Economical_Life, new { placeholder = "Some Eco." })
+            </div>
+        </li>
+        <li class="col-sm-12 total-cost-highlight">
+            <div class="row">
+                <div class="col-sm-6 financial-top-area">
+                    <div class="vertical-middle total-cost-wrapper">
+                        <label><b>Total Cost</b></label>
+                        @Html.EditorFor(m => m.Total_Cost, new { htmlAttributes = new { @class = "greyBold number", @required = "required", @type = "text", @min = "0" } })
+                    </div>
+                    <div class="vertical-middle">
+                        <label>Budget Amount</label>
+                        @Html.EditorFor(m => m.Budget_Amount, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "0" } })
+
+                    </div>
+                </div>
+                <div class="col-sm-6 financial-top-area">
+                    <div class="budget-line-item">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div>
+                                    <label class="LabelFulll">Budget Line Item #</label>
+                                    @Html.EditorFor(m => m.BudgetLineItem, new { htmlAttributes = new { @type = "text", @class = "LabelFulll" } })
+
+                                </div>
+                            </div>
+                            <div class="col-sm-6 budget-checkbox">
+                                <div class="checkbox">
+                                    <label for="In_Budget" class="CheckBoxLable css-label">In Budget</label>
+                                    @Html.CheckBoxFor(m => m.In_Budget, new { })
+                                </div>
+                                <div class="checkbox">
+                                    <label for="Funds_Committed" class="CheckBoxLable css-label">Funds Commited</label>
+                                    @Html.CheckBoxFor(m => m.Funds_Committed, new { })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <script src="~/Scripts/Seaboard/CurrencyFormatter.js"></script>
+    <script type="text/javascript">
+       
+
+        $(document).ready(function () {
+            $('.datetimepicker').datetimepicker({ format: 'MM-DD-YYYY' });
+            $('.selectpicker').selectpicker();
+            totalCostCalculate();
+            function totalCostCalculate() {
+                var purPrice = $("#Purchase_Price").val();
+                purPrice = purPrice.replace("$", "");
+                if (purPrice == "")
+                    purPrice = "0";
+
+                var taxVat = $("#TaxVAT").val();
+                taxVat = taxVat.replace("$", "");
+                if (taxVat == "")
+                    taxVat = "0";
+
+                var services = $("#ServicesInstallation").val();
+                services = services.replace("$", "");
+                if (services == "")
+                    services = "0";
+
+                var otherCosts = $("#Other_Cost_or_Savings").val();
+                otherCosts = otherCosts.replace("$", "");
+                if (otherCosts == "")
+                    otherCosts = "0";
+
+                // remove the commas from the field. The field type is currency - string.replace(/[\,]/g, '')
+                var total = parseFloat(purPrice.replace(/[\,]/g, '')) + parseFloat(taxVat.replace(/[\,]/g, '')) + parseFloat(services.replace(/[\,]/g, '')) + parseFloat(otherCosts.replace(/[\,]/g, ''));
+
+                SetTotalCost(total);
+            }
+            $("#Purchase_Price,#TaxVAT,#ServicesInstallation,#Other_Cost_or_Savings").blur(function () {
+                totalCostCalculate();
+            });
+        });
+    </script>
+</form>

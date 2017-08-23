@@ -1,0 +1,110 @@
+﻿@model SB.AR.AppWeb.ViewModels.LeaseFinancialsViewModel
+<form id="arfrm" method="post" action="/financials/savear" enctype="application/x-www-form-urlencoded">
+  
+    <ul class="row narrative-bottom-area">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        <li class="col-sm-6 financial-top-area">
+            <div class="vertical-middle">
+                <label>Length of Lease (# of periods)<span class="mandatory">*</span></label>
+                @Html.EditorFor(model => model.LengthOfLease, new { htmlAttributes = new { @class = "rightAlign", @type = "number", @min = "0", @required = "required" } })
+                <input type="hidden" name="id" value="@Model.AR.ID">
+                <input type="hidden" name="IsFinanceTab" value="true">
+            </div>
+            <div class="vertical-middle">
+                <label>Cost Per Period<span class="mandatory">*</span></label>
+                @Html.EditorFor(model => model.Cost_Per_Period, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0", @required = "required" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Other Costs or Savings</label>
+                @Html.EditorFor(model => model.Other_Cost_or_Savings, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+            <div class="vertical-middle">
+                <label>Current Year Cost Commitment</label>
+                @Html.EditorFor(model => model.Current_Year_Cost_Commitment, new { htmlAttributes = new { @type = "text", @class = "number", @min = "0" } })
+            </div>
+        </li>
+        <li class="col-sm-6 financial-top-area">
+            <div class="vertical-middle dcc-list">
+                <label class="labels">Lease Type</label>
+                @Html.DropDownListFor(m => m.LeaseType, new SelectList(Model.LeaseTypes, "Value", "Text"),
+                                           new { @id = "arCategory", @class = "selectpicker select", @data_width = "53%", @title = "Lease Type" })
+            </div>
+            <div class="vertical-middle ">
+                <label>Economical Life</label>
+                @Html.EditorFor(m => m.Economical_Life, new { placeholder = "Some Eco." })
+            </div>
+        </li>
+        <li class="col-sm-12 total-cost-highlight">
+            <div class="row">
+                <div class="col-sm-6 financial-top-area">
+                    <div class="vertical-middle total-cost-wrapper">
+                        <label><b>Total Cost</b></label>
+                        @Html.EditorFor(m => m.Total_Cost, new { htmlAttributes = new { @class = "number greyBold", @required = "required", @type = "text", @min = "0" } })
+                    </div>
+                    <div class="vertical-middle">
+                        <label>Budget Amount</label>
+                        @Html.EditorFor(m => m.Budget_Amount, new { htmlAttributes = new { @required = "required", @type = "text", @class = "number", @min = "0" } })
+                    </div>
+                </div>
+                <div class="col-sm-6 financial-top-area">
+                    <div class="budget-line-item">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div>
+                                    <label class="LabelFulll">Budget Line Item #</label>
+                                    @Html.EditorFor(m => m.BudgetLineItem, new { htmlAttributes = new { @type = "text", @class = "LabelFulll" } })
+                                </div>
+                            </div>
+                            <div class="col-sm-6 budget-checkbox">
+                                <div class="checkbox">
+                                    <label for="In_Budget" class="CheckBoxLable css-label">In Budget</label>
+                                    @Html.CheckBoxFor(m => m.In_Budget, new { })
+                                </div>
+                                <div class="checkbox">
+                                    <label for="Funds_Committed" class="CheckBoxLable css-label">Funds Commited</label>
+                                    @Html.CheckBoxFor(m => m.Funds_Committed, new { })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+    <script src="~/Scripts/Seaboard/CurrencyFormatter.js"></script>
+    <script type="text/javascript">
+       
+
+        $(document).ready(function () {
+            $('.datetimepicker').datetimepicker({ format: 'MM-DD-YYYY' });
+            $('.selectpicker').selectpicker();
+
+            totalCostCalculate();
+            function totalCostCalculate() {
+                var lenLease = $("#LengthOfLease").val();
+                lenLease = lenLease.replace("$", "");
+                if (lenLease == "")
+                    lenLease = "1";
+
+                var costPeriod = $("#Cost_Per_Period").val();
+                costPeriod = costPeriod.replace("$", "");
+                if (costPeriod == "")
+                    costPeriod = "1";
+
+                var otherCosts = $("#Other_Cost_or_Savings").val();
+                otherCosts = otherCosts.replace("$", "");
+                if (otherCosts == "")
+                    otherCosts = "0";
+
+                // remove the commas from the field. The field type is currency - string.replace(/[\,]/g, '')
+                var total = (parseFloat(lenLease.replace(/[\,]/g, '')) * parseFloat(costPeriod.replace(/[\,]/g, ''))) + parseFloat(otherCosts.replace(/[\,]/g, ''));
+                SetTotalCost(total);
+            }
+
+            $("#LengthOfLease,#Cost_Per_Period,#Current_Year_Cost_Commitment,#Other_Cost_or_Savings,#Economical_Life").blur(function () {
+                totalCostCalculate();
+            });
+        });
+    </script>
+</form>
